@@ -16,6 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { SurvivorRole } from './Components/survivorRole';
 
 
 const survPerkUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR4W3mqgNZMO0dVt-8zx1H4R9I1tcvo6P66Im5U-QQTSmxhECopKzGbgxvlPdZRyUZGA-tiFihhgfne/pub?gid=435978149&single=true&output=csv'
@@ -80,6 +81,9 @@ function App() {
         const updatedPerks = currentState.map(p => (p.id === perk.id ? updatedPerkState : p));
         return updatedPerks;
       });
+      if (newState === allowed) {
+        // updateParents
+      }
     }
 
     return (
@@ -106,6 +110,11 @@ function App() {
         const updatedTraits = currentState.map(t => (t.id === trait.id ? updatedTraitState : t));
         return updatedTraits;
       });
+      if (newState === allowed) {
+        //enableParents()
+      } else {
+        //disableChildren()
+      }
     }
 
     return (
@@ -317,7 +326,8 @@ function App() {
               label="Survivors"
               checked={showSurvivorSection}
             />
-          </div>        </Form>
+          </div>
+          </Form>
         <Collapse in={!showSurvivorSection}>
           <div>
             <Killers/>
@@ -325,7 +335,7 @@ function App() {
       </Collapse>
         <Collapse in={showSurvivorSection}>
           <div>
-            <Survivors/>
+            <SurvivorRole/>
           </div>
         </Collapse>
       </RecoilRoot>
