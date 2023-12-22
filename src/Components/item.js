@@ -4,7 +4,7 @@ import { survivorItemsState } from '../states';
 
 function Item({item}) {
     const [items, setItems] = useRecoilState(survivorItemsState);
-    let itemStateToUpdate = items.find(p => p.id === item.id)
+    let itemStateToUpdate = items.find(i => i.id === item.id)
     let allowed = itemStateToUpdate.allowed
     const newState = !allowed
 

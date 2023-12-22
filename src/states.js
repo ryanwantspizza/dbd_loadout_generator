@@ -29,3 +29,13 @@ export const noItemAllowedState = atom({
     key: 'noItemAllowedState',
     default: true
 });
+
+export const survivorItemAddOnsState = atom({
+    key: 'survivorItemAddOnsState',
+    default: []
+});
+
+export const noItemAddOnAllowedState = atom({
+    key: 'noItemAddOnAllowedState',
+    default: true
+});

@@ -9,6 +9,7 @@ import { SurvivorSelector } from './survivorSelector';
 import { BuildGenerator } from './buildGenerator';
 import { ItemList } from "./itemList";
 import { ItemSelector } from "./itemSelector";
+import { ItemAddOnList } from "./itemAddOnList";
 
 function SurvivorRole() {
 
@@ -25,6 +26,7 @@ function SurvivorRole() {
             <Col><PerkList/></Col>
             <Col><TraitList/></Col>
             <Col><ItemList/></Col>
+            <Col><ItemAddOnList/></Col>
           </Row>
         </Container>
       </div>
