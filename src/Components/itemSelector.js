@@ -58,13 +58,22 @@ function ItemSelector() {
         if (!selectedItemName) {
             setMessage("No item")
         } else {
-           setMessage(`${selectedItemName} + ${selectedAddOns[0].name} & ${selectedAddOns[1].name}`)
+           setMessage(`${selectedItemName} + ${handleAddOnMessage(selectedAddOns[0])} & ${handleAddOnMessage(selectedAddOns[1])}`)
         }
+    }
+
+    function handleAddOnMessage(addOn) {
+      console.log(addOn)
+      if (addOn?.name) {
+        return addOn.name
+      } else {
+        return addOn
+      }
     }
 
     return(
         <div>
-          <button onClick={handleClick}>Get Item</button>
+          <button onClick={handleClick}>Get Item and Add Ons</button>
           <p>{message}</p>
         </div>
       )
