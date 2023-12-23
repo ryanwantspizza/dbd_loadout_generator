@@ -10,6 +10,8 @@ import { BuildGenerator } from './buildGenerator';
 import { ItemList } from "./itemList";
 import { ItemSelector } from "./itemSelector";
 import { ItemAddOnList } from "./itemAddOnList";
+import { OfferingList } from "./offeringList";
+import { OfferingSelector } from "./offeringSelector"
 
 function SurvivorRole() {
 
@@ -20,6 +22,7 @@ function SurvivorRole() {
             <Col><SurvivorSelector/></Col>
             <Col><BuildGenerator/></Col>
             <Col><ItemSelector/></Col>
+            <Col><OfferingSelector/></Col>
           </Row>
           <Row>
             <Col><SurvivorList/></Col>
@@ -27,6 +30,7 @@ function SurvivorRole() {
             <Col><TraitList/></Col>
             <Col><ItemList/></Col>
             <Col><ItemAddOnList/></Col>
+            <Col><OfferingList/></Col>
           </Row>
         </Container>
       </div>

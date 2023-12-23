@@ -39,3 +39,13 @@ export const noItemAddOnAllowedState = atom({
     key: 'noItemAddOnAllowedState',
     default: true
 });
+
+export const survivorOfferingsState = atom({
+    key: 'survivorOfferingsState',
+    default: []
+});
+
+export const noOfferingAllowedState = atom({
+    key: 'noOfferingAllowedState',
+    default: true
+});
