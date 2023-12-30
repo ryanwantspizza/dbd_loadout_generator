@@ -49,3 +49,8 @@ export const noOfferingAllowedState = atom({
     key: 'noOfferingAllowedState',
     default: true
 });
+
+export const defaultEmptyAllowedState = atom({
+    key: 'defaultEmptyAllowedState', // Unique key
+    default: "not allowed", // Default value
+});

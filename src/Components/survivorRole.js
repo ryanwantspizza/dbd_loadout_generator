@@ -2,16 +2,15 @@ import React from "react";
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import { PerkList } from './perkList';
 import { TraitList } from './traitList';
-import { SurvivorList } from './survivorList';
 import { SurvivorSelector } from './survivorSelector';
 import { BuildGenerator } from './buildGenerator';
-import { ItemList } from "./itemList";
 import { ItemSelector } from "./itemSelector";
-import { ItemAddOnList } from "./itemAddOnList";
 import { OfferingList } from "./offeringList";
 import { OfferingSelector } from "./offeringSelector"
+import { List } from "./list"
+import {survivorsState, survivorPerksState, survivorPerkTraitsState, survivorItemsState, survivorItemAddOnsState, survivorOfferingsState, defaultEmptyAllowedState, noItemAllowedState, allowEmptySurvivorPerk, noItemAddOnAllowedState, noOfferingAllowedState } from '../states';
+import { urls } from "../urls"
 
 function SurvivorRole() {
 
@@ -25,12 +24,12 @@ function SurvivorRole() {
             <Col><OfferingSelector/></Col>
           </Row>
           <Row>
-            <Col><SurvivorList/></Col>
-            <Col><PerkList/></Col>
-            <Col><TraitList/></Col>
-            <Col><ItemList/></Col>
-            <Col><ItemAddOnList/></Col>
-            <Col><OfferingList/></Col>
+            <Col><List key={"survivors"} listState={survivorsState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.surivors}/></Col>
+            <Col><List key ={"survivorPerks"} listState={survivorPerksState} emptyAllowedState={allowEmptySurvivorPerk} listUrl={urls.survivorPerks}/></Col>
+            <Col><List key={"survivorPerkTraits"} listState={survivorPerkTraitsState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.survivorPerkTraits}/></Col>
+            <Col><List key={"survivorItems"} listState={survivorItemsState} emptyAllowedState={noItemAllowedState} listUrl={urls.survivorItems}/></Col>
+            <Col><List key={"survivorItemAddOns"} listState={survivorItemAddOnsState} emptyAllowedState={noItemAddOnAllowedState} listUrl={urls.survivorItemAddOns}/></Col>
+            <Col><List key={"survivorOfferings"} listState={survivorOfferingsState} emptyAllowedState={noOfferingAllowedState} listUrl={urls.offerings}/></Col>
           </Row>
         </Container>
       </div>
