@@ -4,7 +4,7 @@ import { Checkbox } from "./checkbox";
 import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
 
-function List({ key, listState, emptyAllowedState, listUrl }) {
+function List({ id, listState, emptyAllowedState, listUrl }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
 
@@ -21,20 +21,20 @@ function List({ key, listState, emptyAllowedState, listUrl }) {
             }
             return 0;
             })
-            setList(removeOppositeRoleOfferings(sortedResults));
+            let filteredData = removeOppositeRoleOfferings(sortedResults);
+            setList(filteredData);
           }
         });
       }, []);
 
       function removeOppositeRoleOfferings(data) {
-        let filteredData = data;
-        if (key === "survivorOfferings") {
-          filteredData = data.filter(offering => offering.role !== "killer")
+        if (id === "survivorOfferings") {
+          return data.filter(offering => offering.role !== "killer")
+        } else if (id === "killerOfferings") {
+          return data.filter(offering => offering.role !== "survivor")
+        } else {
+          return data;
         }
-        if (key === "killerOfferings") {
-          filteredData = data.filter(offering => offering.role !== "survivor")
-        }
-        return filteredData;
       }
     
       function handleClick(selectAll) {

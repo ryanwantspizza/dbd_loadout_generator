@@ -16,7 +16,7 @@ function KillerRole() {
               <Col><KillerSelector/></Col>
             </Row>
             <Row>
-              <Col><List key={"killers"} listState={killersState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.killers}/></Col>
+              <Col><List id={"killers"} listState={killersState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.killers}/></Col>
             </Row>
           </Container>
         </div>

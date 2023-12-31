@@ -22,12 +22,12 @@ function SurvivorRole() {
             <Col><OfferingSelector/></Col>
           </Row>
           <Row>
-            <Col><List key={"survivors"} listState={survivorsState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.surivors}/></Col>
-            <Col><List key ={"survivorPerks"} listState={survivorPerksState} emptyAllowedState={allowEmptySurvivorPerk} listUrl={urls.survivorPerks}/></Col>
-            <Col><List key={"survivorPerkTraits"} listState={survivorPerkTraitsState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.survivorPerkTraits}/></Col>
-            <Col><List key={"survivorItems"} listState={survivorItemsState} emptyAllowedState={noItemAllowedState} listUrl={urls.survivorItems}/></Col>
-            <Col><List key={"survivorItemAddOns"} listState={survivorItemAddOnsState} emptyAllowedState={noItemAddOnAllowedState} listUrl={urls.survivorItemAddOns}/></Col>
-            <Col><List key={"survivorOfferings"} listState={survivorOfferingsState} emptyAllowedState={noOfferingAllowedState} listUrl={urls.offerings}/></Col>
+            <Col><List id={"survivors"} listState={survivorsState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.surivors}/></Col>
+            <Col><List id ={"survivorPerks"} listState={survivorPerksState} emptyAllowedState={allowEmptySurvivorPerk} listUrl={urls.survivorPerks}/></Col>
+            <Col><List id={"survivorPerkTraits"} listState={survivorPerkTraitsState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.survivorPerkTraits}/></Col>
+            <Col><List id={"survivorItems"} listState={survivorItemsState} emptyAllowedState={noItemAllowedState} listUrl={urls.survivorItems}/></Col>
+            <Col><List id={"survivorItemAddOns"} listState={survivorItemAddOnsState} emptyAllowedState={noItemAddOnAllowedState} listUrl={urls.survivorItemAddOns}/></Col>
+            <Col><List id={"survivorOfferings"} listState={survivorOfferingsState} emptyAllowedState={noOfferingAllowedState} listUrl={urls.offerings}/></Col>
           </Row>
         </Container>
       </div>
