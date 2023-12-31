@@ -4,7 +4,7 @@ import { Checkbox } from "./checkbox";
 import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
 
-function List({ listState, emptyAllowedState, listUrl }) {
+function List({ key, listState, emptyAllowedState, listUrl }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
 
@@ -12,10 +12,30 @@ function List({ listState, emptyAllowedState, listUrl }) {
         readRemoteFile(listUrl, {
           header: true,
           complete: (results) => {
-            setList(results.data);
+            let sortedResults = results.data.sort((a,b) => {
+              if (a.name < b.name) {
+                return -1;
+            }
+            if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+            })
+            setList(removeOppositeRoleOfferings(sortedResults));
           }
         });
       }, []);
+
+      function removeOppositeRoleOfferings(data) {
+        let filteredData = data;
+        if (key === "survivorOfferings") {
+          filteredData = data.filter(offering => offering.role !== "killer")
+        }
+        if (key === "killerOfferings") {
+          filteredData = data.filter(offering => offering.role !== "survivor")
+        }
+        return filteredData;
+      }
     
       function handleClick(selectAll) {
         const newListState = list.map(item => {

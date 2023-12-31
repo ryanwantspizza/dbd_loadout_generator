@@ -2,11 +2,9 @@ import React from "react";
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import { TraitList } from './traitList';
 import { SurvivorSelector } from './survivorSelector';
 import { BuildGenerator } from './buildGenerator';
 import { ItemSelector } from "./itemSelector";
-import { OfferingList } from "./offeringList";
 import { OfferingSelector } from "./offeringSelector"
 import { List } from "./list"
 import {survivorsState, survivorPerksState, survivorPerkTraitsState, survivorItemsState, survivorItemAddOnsState, survivorOfferingsState, defaultEmptyAllowedState, noItemAllowedState, allowEmptySurvivorPerk, noItemAddOnAllowedState, noOfferingAllowedState } from '../states';

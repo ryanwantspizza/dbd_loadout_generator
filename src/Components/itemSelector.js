@@ -50,20 +50,21 @@ function ItemSelector() {
           setChosenAddOns(newChosenAddOns)
         }
 
-        handleMessage(item.name, newChosenAddOns)
+        handleMessage(item, newChosenAddOns)
     }
 
 
-    function handleMessage(selectedItemName, selectedAddOns) {
-        if (!selectedItemName) {
+    function handleMessage(selectedItem, selectedAddOns) {
+        if (!selectedItem.name) {
             setMessage("No item")
+        } else if (selectedItem.item_type_id !== "6") {
+           setMessage(`${selectedItem.name} + ${handleAddOnMessage(selectedAddOns[0])} & ${handleAddOnMessage(selectedAddOns[1])}`)
         } else {
-           setMessage(`${selectedItemName} + ${handleAddOnMessage(selectedAddOns[0])} & ${handleAddOnMessage(selectedAddOns[1])}`)
+          setMessage(selectedItem.name)
         }
     }
 
     function handleAddOnMessage(addOn) {
-      console.log(addOn)
       if (addOn?.name) {
         return addOn.name
       } else {

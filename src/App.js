@@ -17,16 +17,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { SurvivorRole } from './Components/survivorRole';
+import { KillerRole } from './Components/killerRole';
 
 function App() {
-  
-  function Killers() {
-    return(
-      <div>
-        <p>WIP</p>
-      </div>
-    )
-  }
 
   const [showSurvivorSection, setShowSurvivorSection] = useState(true);
 
@@ -51,7 +44,7 @@ function App() {
           </Form>
         <Collapse in={!showSurvivorSection}>
           <div>
-            <Killers/>
+            <KillerRole/>
           </div>
       </Collapse>
         <Collapse in={showSurvivorSection}>

@@ -54,3 +54,8 @@ export const defaultEmptyAllowedState = atom({
     key: 'defaultEmptyAllowedState', // Unique key
     default: "not allowed", // Default value
 });
+
+export const killersState = atom({
+    key: "killersState",
+    default: []
+});
