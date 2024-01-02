@@ -28,14 +28,14 @@ function OfferingList() {
     }
 
     function handleClick(selectAll) {
-      const newOfferingsState = offerings.map(offering => {
+      const newsurvivorOfferingsState = offerings.map(offering => {
         return {
           ...offering,
           allowed: selectAll
         };
       });
 
-      setOfferings(newOfferingsState)
+      setOfferings(newsurvivorOfferingsState)
     }
 
     return(

@@ -59,3 +59,8 @@ export const killersState = atom({
     key: "killersState",
     default: []
 });
+
+export const killerOfferingsState = atom({
+    key: "killerOfferingsState",
+    default: []
+});

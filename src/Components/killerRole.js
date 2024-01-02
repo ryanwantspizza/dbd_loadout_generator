@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import { KillerSelector } from './killerSelector'; 
 import { OfferingSelector } from "./offeringSelector"
 import { List } from "./list"
-import { killersState, defaultEmptyAllowedState, noOfferingAllowedState } from '../states';
+import { killersState, killerOfferingsState, defaultEmptyAllowedState, noOfferingAllowedState } from '../states';
 import { urls } from "../urls"
 
 function KillerRole() {
@@ -17,6 +17,7 @@ function KillerRole() {
             </Row>
             <Row>
               <Col><List id={"killers"} listState={killersState} emptyAllowedState={defaultEmptyAllowedState} listUrl={urls.killers}/></Col>
+              <Col><List id={"killerOfferings"} listState={killerOfferingsState} emptyAllowedState={noOfferingAllowedState} listUrl={urls.offerings}/></Col>
             </Row>
           </Container>
         </div>
