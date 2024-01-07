@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { survivorPerksState, allowEmptySurvivorPerk } from '../states'
+import { states } from '../states'
 
 function BuildGenerator() {
     const [chosenPerks, setChosenPerks] = useState([]);
-    const allPerks = useRecoilValue(survivorPerksState);
+    const allPerks = useRecoilValue(states.survivorPerksState);
     const currentAllowedPerks = allPerks.filter(p => p.allowed);
-    let addEmptySlot = useRecoilValue(allowEmptySurvivorPerk) ? 1 : 0
+    let addEmptySlot = useRecoilValue(states.allowEmptySurvivorPerk) ? 1 : 0
 
     function handleClickEvent() {
       setChosenPerks([])

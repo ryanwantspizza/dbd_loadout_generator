@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useRecoilValue } from 'recoil';
-import { survivorsState } from '../states';
+import { states } from '../states';
 
 function SurvivorSelector() {
     const [chosenSurvivor, setChosenSurvivor] = useState("");
-    const allSurvivors = useRecoilValue(survivorsState);
+    const allSurvivors = useRecoilValue(states.survivorsState);
     const currentAllowedSurvivors = allSurvivors.filter(s => s.allowed);
 
     function handleClick() {

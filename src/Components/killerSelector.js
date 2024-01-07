@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useRecoilValue } from 'recoil';
-import { killersState } from '../states';
+import { states } from '../states';
 
 function KillerSelector() {
     const [chosenKiller, setchosenKiller] = useState("");
-    const allKillers = useRecoilValue(killersState);
+    const allKillers = useRecoilValue(states.killersState);
     const currentAllowedKillers = allKillers.filter(k => k.allowed);
 
     function handleClick() {

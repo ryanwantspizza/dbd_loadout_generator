@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useRecoilValue } from 'recoil';
-import { survivorOfferingsState, noOfferingAllowedState } from '../states';
+import { states } from '../states';
 
-function OfferingSelector() {
+function SurvivorOfferingSelector() {
     const [chosenOffering, setchosenOffering] = useState("");
     const [message, setMessage] = useState("");
-    const allOfferings = useRecoilValue(survivorOfferingsState);
+    const allOfferings = useRecoilValue(states.survivorOfferingsState);
     const currentAllowedOfferings = allOfferings.filter(o => o.allowed);
-    let noOfferingAllowed = useRecoilValue(noOfferingAllowedState) ? 1 : 0;
+    let noOfferingAllowed = useRecoilValue(states.noSurvivorOfferingAllowedState) ? 1 : 0;
 
     function handleClick() {
         setchosenOffering("");
@@ -41,4 +41,4 @@ function OfferingSelector() {
       )
 }
 
-export { OfferingSelector };
+export { SurvivorOfferingSelector };

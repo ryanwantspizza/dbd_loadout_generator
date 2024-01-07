@@ -2,63 +2,55 @@ import React, { useState } from "react";
 import { useRecoilValue } from 'recoil';
 import { states } from '../states';
 
-function ItemSelector() {
-    const [chosenItem, setChosenItem] = useState("");
-    const [chosenAddOns, setChosenAddOns] = useState([]);
+function Selector({ id, optionsState }) {
     const [message, setMessage] = useState("");
-    const allItems = useRecoilValue(states.survivorItemsState);
+    const options = useRecoilValue(optionsState);
     const allAddOns = useRecoilValue(states.survivorItemAddOnsState);
     const currentAllowedItems = allItems.filter(i => i.allowed);
     let noItemAllowed = useRecoilValue(states.noItemAllowedState) ? 1 : 0;
     const currentAllowedAddOns = allAddOns.filter(a => a.allowed);
     let addEmptySlot = useRecoilValue(states.noItemAddOnAllowedState) ? 1 : 0
-
     function handleClick() {
-        setChosenItem("");
-        setChosenAddOns([]);
-        let item = "";
+        let chosenItem;
+        let chosenAddOns = [];
 
         if (currentAllowedItems.length > 0) {
             let randomNumber = Math.floor(Math.random() * (currentAllowedItems.length + noItemAllowed));
             if (randomNumber !== currentAllowedItems.length) {
                 item = currentAllowedItems[randomNumber]
-                setChosenItem(item.name);
+                chosenItem = item.name;
             }
         }
 
-        let newChosenAddOns = [];
         if (item) {
             let applicableAddOns = currentAllowedAddOns.filter(a => a.item_type_id == item.item_type_id)
-        console.log(applicableAddOns)
 
         
-        let alreadyChosen = []
-        let numberOfAddOnsToChooseFrom = applicableAddOns.length < 2 ? applicableAddOns.length : 2
+            let alreadyChosen = []
+            let numberOfAddOnsToChooseFrom = applicableAddOns.length < 2 ? applicableAddOns.length : 2
 
-        for (let i = 0; i < numberOfAddOnsToChooseFrom ; i++) {
-            let randomNumber;
-            do {
-              randomNumber = Math.floor(Math.random() * (applicableAddOns.length + addEmptySlot));
-            } while (alreadyChosen.includes(randomNumber))
-            if (randomNumber !== applicableAddOns.length) {
-              newChosenAddOns.push(applicableAddOns[randomNumber])
-              alreadyChosen.push(randomNumber)
-            } else {
-                newChosenAddOns.push("Empty Slot")
+            for (let i = 0; i < numberOfAddOnsToChooseFrom ; i++) {
+                let randomNumber;
+                do {
+                    randomNumber = Math.floor(Math.random() * (applicableAddOns.length + addEmptySlot));
+                } while (alreadyChosen.includes(randomNumber))
+                if (randomNumber !== applicableAddOns.length) {
+                    chosenAddOns.push(applicableAddOns[randomNumber])
+                    alreadyChosen.push(randomNumber)
+                }
             }
-          }
-          setChosenAddOns(newChosenAddOns)
         }
 
-        handleMessage(item, newChosenAddOns)
+        handleItemMessage(item, chosenAddOns)
     }
 
-
-    function handleMessage(selectedItem, selectedAddOns) {
+    function handleItemMessage(selectedItem, selectedAddOns) {
         if (!selectedItem.name) {
             setMessage("No item")
-        } else if (selectedItem.item_type_id !== "6") {
+        } else if (selectedItem.item_type_id !== "6" && selectedAddOns.length == 2) {
            setMessage(`${selectedItem.name} + ${handleAddOnMessage(selectedAddOns[0])} & ${handleAddOnMessage(selectedAddOns[1])}`)
+        } else if (selectedItem.item_type_id !== "6" && selectedAddOns.length == 1) {
+            setMessage(`${selectedItem.name} + ${handleAddOnMessage(selectedAddOns[0])}`)
         } else {
           setMessage(selectedItem.name)
         }
@@ -72,12 +64,8 @@ function ItemSelector() {
       }
     }
 
-    return(
-        <div>
-          <button onClick={handleClick}>Get Item and Add Ons</button>
-          <p>{message}</p>
-        </div>
-      )
-}
+    function handlePerkMessage(selectedPerks) {
+      selectedPerks.join();
+    }
 
-export { ItemSelector };
+}

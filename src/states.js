@@ -1,66 +1,76 @@
 import { atom } from 'recoil';
 
-export const survivorPerksState = atom({
-    key: 'survivorPerksState',
-    default: []
-});
-
-export const survivorPerkTraitsState = atom({
-    key: 'survivorPerkTraitsState',
-    default: []
-});
-
-export const survivorsState = atom({
-    key: 'survivorsState',
-    default: []
-});
-
-export const survivorItemsState = atom({
-    key: 'survivorItemsState',
-    default: []
-});
-
-export const allowEmptySurvivorPerk = atom({
-    key: 'allowEmptySurvivorPerk',
-    default: true
-});
-
-export const noItemAllowedState = atom({
-    key: 'noItemAllowedState',
-    default: true
-});
-
-export const survivorItemAddOnsState = atom({
-    key: 'survivorItemAddOnsState',
-    default: []
-});
-
-export const noItemAddOnAllowedState = atom({
-    key: 'noItemAddOnAllowedState',
-    default: true
-});
-
-export const survivorOfferingsState = atom({
-    key: 'survivorOfferingsState',
-    default: []
-});
-
-export const noOfferingAllowedState = atom({
-    key: 'noOfferingAllowedState',
-    default: true
-});
-
-export const defaultEmptyAllowedState = atom({
-    key: 'defaultEmptyAllowedState', // Unique key
-    default: "not allowed", // Default value
-});
-
-export const killersState = atom({
-    key: "killersState",
-    default: []
-});
-
-export const killerOfferingsState = atom({
-    key: "killerOfferingsState",
-    default: []
-});
+export const states = {
+    survivorPerksState: atom({
+        key: 'survivorPerksState',
+        default: []
+    }),
+    survivorPerkTraitsState: atom({
+        key: 'survivorPerkTraitsState',
+        default: []
+    }),
+    survivorsState: atom({
+        key: 'survivorsState',
+        default: []
+    }),
+    survivorItemsState: atom({
+        key: 'survivorItemsState',
+        default: []
+    }),
+    allowEmptySurvivorPerk: atom({
+        key: 'allowEmptySurvivorPerk',
+        default: true
+    }),
+    noItemAllowedState: atom({
+        key: 'noItemAllowedState',
+        default: true
+    }),
+    survivorItemAddOnsState: atom({
+        key: 'survivorItemAddOnsState',
+        default: []
+    }),
+    noItemAddOnAllowedState: atom({
+        key: 'noItemAddOnAllowedState',
+        default: true
+    }),
+    survivorOfferingsState: atom({
+        key: 'survivorOfferingsState',
+        default: []
+    }),
+    noSurvivorOfferingAllowedState: atom({
+        key: 'noSurvivorOfferingAllowedState',
+        default: true
+    }),
+    defaultEmptyAllowedState: atom({
+        key: 'defaultEmptyAllowedState',
+        default: "not allowed",
+    }),
+    killersState: atom({
+        key: "killersState",
+        default: []
+    }),
+    killerOfferingsState: atom({
+        key: "killerOfferingsState",
+        default: []
+    }),
+    noKillerOfferingAllowedState: atom({
+        key: "noKillerOfferingAllowedState",
+        default: true
+    }),
+    killerAddOnsState: atom({
+        key: "killerAddOnsState",
+        default: []
+    }),
+    noKillerAddOnAllowedState: atom({
+        key: "noKillerAddOnAllowedState",
+        default: true
+    }),
+    killerPerksState: atom({
+        key: "killerPerksState",
+        default: []
+    }),
+    allowEmptyKillerPerkSlot: atom({
+        key: "allowEmptyKillerPerkSlot",
+        default: true
+    }),
+}
