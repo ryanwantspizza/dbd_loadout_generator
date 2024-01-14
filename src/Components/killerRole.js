@@ -3,7 +3,6 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { Selector } from './selector'; 
-import { OfferingSelector } from "./survivorOfferingSelector"
 import { List } from "./list"
 import { states } from '../states';
 import { urls } from "../urls"
@@ -14,8 +13,8 @@ function KillerRole() {
           <Container>
             <Row>
               <Col><Selector type={"Killer"} optionsState={states.killersState} addOnsState={states.killerAddOnsState} emptyAddOnAllowed={states.noKillerAddOnAllowedState}/></Col>
-              <Col><Selector type={"perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot}/></Col>
-              <Col><Selector type={"offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState}/></Col>
+              <Col><Selector type={"Perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot}/></Col>
+              <Col><Selector type={"Offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState}/></Col>
             </Row>
             <Row>
               <Col><List id={"killers"} listState={states.killersState} emptyAllowedState={states.defaultEmptyAllowedState} listUrl={urls.killers}/></Col>

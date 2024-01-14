@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRecoilValue } from 'recoil';
-import { states } from '../states';
 
 function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAllowed }) {
     const [message, setMessage] = useState("");
@@ -13,7 +12,7 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
     function handleClickEvent() {
         if (type === "Killer" || type === "Item") {
             handleSelectionWithAddOns()
-        } else if (type === "perks") {
+        } else if (type === "Perks") {
             handlePerkSelection()
         } else if (allowedOptions.length > 0) {
             handleSingleSelection()
@@ -92,17 +91,20 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
         }
 
         if (selection) {
-            let applicableAddOns = getApplicableAddOns(allowedAddOns, selection.id)
+            let applicableAddOns = getApplicableAddOns(allowedAddOns, selection.item_type_id)
             chosenAddOns = handleAddOnSelection(applicableAddOns)
+            handleSelectionWithAddOnsMessage(selection, chosenAddOns)
+        } else {
+            setMessage(`No ${type.toLowerCase()}`)
         }
 
-        handleSelectionWithAddOnsMessage(selection, chosenAddOns)
     }
 
     function handleSelectionWithAddOnsMessage(selection, addOns) {
-        if (addOns.length == 2) {
+        if (addOns?.length === 2) {
             setMessage(`${selection.name} + ${addOns[0].name} & ${addOns[1].name}`)
-        } else if (addOns.length == 1) {
+        } else if (addOns?.length === 1) {
+            console.log(addOns)
             setMessage(`${selection.name} + ${addOns[0].name}`)
         } else {
             setMessage(selection.name)

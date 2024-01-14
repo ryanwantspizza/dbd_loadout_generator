@@ -9,6 +9,7 @@ import { SurvivorOfferingSelector } from "./survivorOfferingSelector"
 import { List } from "./list"
 import { states } from '../states';
 import { urls } from "../urls"
+import { Selector } from "./selector";
 
 function SurvivorRole() {
 
@@ -16,9 +17,9 @@ function SurvivorRole() {
       <div>
         <Container>
           <Row>
-            <Col><SurvivorSelector/></Col>
-            <Col><BuildGenerator/></Col>
-            <Col><ItemSelector/></Col>
+            <Col><Selector type={"Survivor"} optionsState={states.survivorsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.defaultEmptyAllowedState}/></Col>
+            <Col><Selector type={"Perks"} optionsState={states.survivorPerksState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.allowEmptySurvivorPerk}/></Col>
+            <Col><Selector type={"Item"} optionsState={states.survivorItemsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.noItemAllowedState} emptyAddOnAllowed={states.noItemAddOnAllowedState}/></Col>
             <Col><SurvivorOfferingSelector/></Col>
           </Row>
           <Row>
