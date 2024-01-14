@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { readRemoteFile } from "react-papaparse";
 import { Checkbox } from "./checkbox";
 import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
+import Accordion from 'react-bootstrap/Accordion';
 
-function List({ id, listState, emptyAllowedState, listUrl }) {
+function List({ id, listState, emptyAllowedState, listUrl, type }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
+    const [displayState, setDisplayState] = useState(false)
 
     useEffect(() => {
         readRemoteFile(listUrl, {
@@ -71,7 +73,10 @@ function List({ id, listState, emptyAllowedState, listUrl }) {
       }
     
       return(
-        <div >
+        <Accordion>
+          <Accordion.Item eventKey="0">
+          <Accordion.Header>{`Filter ${type}`}</Accordion.Header>
+          <Accordion.Body>
           {renderEmptyToggle()}
           <button onClick={() => handleClick(true)}>Select All</button>
           <button onClick={() => handleClick(false)}>Unselect All</button>
@@ -80,7 +85,9 @@ function List({ id, listState, emptyAllowedState, listUrl }) {
                 <Checkbox key={item.id} item={item} listState={listState}/>
             ) 
           })}
-        </div>
+          </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
       )
 };
 

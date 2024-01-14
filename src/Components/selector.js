@@ -91,7 +91,8 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
         }
 
         if (selection) {
-            let applicableAddOns = getApplicableAddOns(allowedAddOns, selection.item_type_id)
+            let selection_id = type === "Killer" ? selection.id : selection.item_type_id
+            let applicableAddOns = getApplicableAddOns(allowedAddOns, selection_id)
             chosenAddOns = handleAddOnSelection(applicableAddOns)
             handleSelectionWithAddOnsMessage(selection, chosenAddOns)
         } else {
