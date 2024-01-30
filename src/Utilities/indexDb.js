@@ -1,6 +1,6 @@
 const dbName = "dbd_buildout_db";
 
-export const initDB = () => {
+export const initIndexDb = () => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName, 1);
 
@@ -9,6 +9,7 @@ export const initDB = () => {
     };
 
     request.onsuccess = (event) => {
+      console.log("indexDb successfully initialized")
       resolve(event.target.result);
     };
 

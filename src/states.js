@@ -73,4 +73,8 @@ export const states = {
         key: "allowEmptyKillerPerkSlot",
         default: true
     }),
+    indexDb: atom({
+        key: "indexDb",
+        default: null
+    })
 }

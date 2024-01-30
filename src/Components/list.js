@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 
-function List({ id, listState, emptyAllowedState, listUrl, type }) {
+function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
     const [displayState, setDisplayState] = useState(false)
@@ -82,7 +82,7 @@ function List({ id, listState, emptyAllowedState, listUrl, type }) {
           <button onClick={() => handleClick(false)}>Unselect All</button>
           {list.map((item) => {
             return(
-                <Checkbox key={item.id} item={item} listState={listState}/>
+                <Checkbox key={item.id} item={item} listState={listState} db={db} />
             ) 
           })}
           </Accordion.Body>

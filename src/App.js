@@ -1,26 +1,13 @@
 import './App.css';
-import React, {useState, useEffect} from "react";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-  useRecoilValueLoadable
-} from 'recoil';
-import { usePapaParse } from 'react-papaparse';
-import ToggleButton from 'react-bootstrap/ToggleButton'
+import React, { useState } from "react";
+import { RecoilRoot } from 'recoil';
 import Collapse from 'react-bootstrap/Collapse';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { SurvivorRole } from './Components/survivorRole';
 import { KillerRole } from './Components/killerRole';
 
 function App() {
-
   const [showSurvivorSection, setShowSurvivorSection] = useState(true);
 
   function handleToggle(event) {
