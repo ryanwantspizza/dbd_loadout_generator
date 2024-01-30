@@ -40,3 +40,19 @@ export const updateData = (db, storeName, data) => {
     };
   });
 };
+
+export const deleteData = (db, storeName, key) => {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([storeName], "readwrite")
+    const store = transaction.objectStore(storeName);
+    const request = store.delete(key);
+
+    request.onsuccess = () => {
+      resolve("Data successfully deleted");
+    };
+
+    request.onerror = (event) => {
+      reject("Error updating data: " + event.target.errorCode);
+    };
+  });
+}

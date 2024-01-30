@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { updateData } from '../Utilities/indexDb';
+import { updateData, deleteData } from '../Utilities/indexDb';
 import { states } from "../states";
 
 function Checkbox({ item, listState, db }) {
@@ -24,9 +24,12 @@ function Checkbox({ item, listState, db }) {
             console.log("Db not initialized")
         }
         if (!updatedItem.allowed) {
-            console.log(indexDb)
             updateData(indexDb, "notAllowed", updatedItem).then(() => {
                 console.log("Data updated")
+            })
+        } else {
+            deleteData(indexDb, "notAllowed", updatedItem.id).then(() => {
+                console.log("Data deleted")
             })
         }
         // Add logic to update parent and children items

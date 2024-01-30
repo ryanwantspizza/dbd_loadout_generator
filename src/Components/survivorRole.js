@@ -22,8 +22,6 @@ function SurvivorRole() {
     });
   }, [])
 
-  console.log(`IndexDb: ${indexDb}`)
-
     return(
       <div>
         <Container>
