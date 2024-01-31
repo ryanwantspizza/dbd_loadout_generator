@@ -56,3 +56,21 @@ export const deleteData = (db, storeName, key) => {
     };
   });
 }
+
+export const getData = (db, storeName) => {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([storeName], "read")
+    const store = transaction.objectStore(storeName)
+    const request = store.getAll()
+
+    request.onsuccess = () => {
+      let allObjects = request.result; // array of all objects in the store
+      resolve(allObjects); // do something with the objects
+    };
+
+    request.onerror = () => {
+      // Handle errors
+      reject("Error in retrieving data: ", request.error);
+    };
+  })
+}
