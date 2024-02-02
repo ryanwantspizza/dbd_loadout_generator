@@ -37,8 +37,10 @@ function Checkbox({ item, listState, db }) {
 
     return (
         <div>
-            <input type="checkbox" id={item.id} checked={allowed} onChange={handleClickEvent}/>
-            <label htmlFor={item.id}>{item.name}</label>
+            <label>
+                <input type="checkbox" id={item.id} checked={allowed} onChange={handleClickEvent} style={{ marginRight: '8px' }}/>
+                {item.name}
+            </label>
         </div>
     )
 }

@@ -27,6 +27,7 @@ function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
             setList(filteredData);
           }
         });
+
       }, []);
 
       function removeOppositeRoleOfferings(data) {
@@ -41,6 +42,11 @@ function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
     
       function handleClick(selectAll) {
         const newListState = list.map(item => {
+          // if (!selectAll) {
+          //   updateData(indexDb, "notAllowed", item).then(() => {
+          //     console.log("Data updated")
+          // })
+        // }
           return {
             ...item,
             allowed: selectAll
@@ -82,7 +88,7 @@ function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
           <button onClick={() => handleClick(false)}>Unselect All</button>
           {list.map((item) => {
             return(
-                <Checkbox key={item.id} item={item} listState={listState} db={db} />
+                <Checkbox key={item.id} item={item} listState={listState} db={db}/>
             ) 
           })}
           </Accordion.Body>
