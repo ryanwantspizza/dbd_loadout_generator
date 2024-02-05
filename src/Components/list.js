@@ -4,30 +4,35 @@ import { Checkbox } from "./checkbox";
 import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
+import { deleteData, insertData, initIndexDb } from "../Utilities/indexDb"
 
-function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
+function List({ id, listState, emptyAllowedState, listUrl, filter }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
     const [displayState, setDisplayState] = useState(false)
-
+    const [indexDb, setIndexDb] = useState(null)
     useEffect(() => {
-        readRemoteFile(listUrl, {
-          header: true,
-          complete: (results) => {
-            let sortedResults = results.data.sort((a,b) => {
-              if (a.name < b.name) {
-                return -1;
+        initIndexDb().then(indexDbInstance => {
+          setIndexDb(indexDbInstance)
+          readRemoteFile(listUrl, {
+            header: true,
+            complete: (results) => {
+              let sortedResults = results.data.sort((a,b) => {
+                if (a.name < b.name) {
+                  return -1;
+              }
+              if (a.name > b.name) {
+                  return 1;
+              }
+              return 0;
+              })
+              let filteredData = removeOppositeRoleOfferings(sortedResults);
+              setList(filteredData);
             }
-            if (a.name > b.name) {
-                return 1;
-            }
-            return 0;
-            })
-            let filteredData = removeOppositeRoleOfferings(sortedResults);
-            setList(filteredData);
-          }
+          });
+        }).catch(error => {
+          console.error("Failed to initialize indexDb", error)
         });
-
       }, []);
 
       function removeOppositeRoleOfferings(data) {
@@ -42,11 +47,16 @@ function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
     
       function handleClick(selectAll) {
         const newListState = list.map(item => {
-          // if (!selectAll) {
-          //   updateData(indexDb, "notAllowed", item).then(() => {
-          //     console.log("Data updated")
-          // })
-        // }
+          if (!selectAll) {
+            insertData(indexDb, `${id}NotAllowed`, item).then(() => {
+              console.log("Data inserted")
+          })}
+
+          if (selectAll) {
+            deleteData(indexDb, `${id}NotAllowed`, item.id).then(() => {
+              console.log("Data deleted")
+            })
+          }
           return {
             ...item,
             allowed: selectAll
@@ -81,14 +91,14 @@ function List({ id, listState, emptyAllowedState, listUrl, type, db }) {
       return(
         <Accordion>
           <Accordion.Item eventKey="0">
-          <Accordion.Header>{`Filter ${type}`}</Accordion.Header>
+          <Accordion.Header>{`Filter ${filter}`}</Accordion.Header>
           <Accordion.Body>
           {renderEmptyToggle()}
           <button onClick={() => handleClick(true)}>Select All</button>
           <button onClick={() => handleClick(false)}>Unselect All</button>
           {list.map((item) => {
             return(
-                <Checkbox key={item.id} item={item} listState={listState} db={db}/>
+                <Checkbox key={item.id} item={item} listState={listState} db={indexDb} id={id}/>
             ) 
           })}
           </Accordion.Body>

@@ -1,9 +1,8 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { updateData, deleteData } from '../Utilities/indexDb';
-import { states } from "../states";
+import { insertData, deleteData } from '../Utilities/indexDb';
 
-function Checkbox({ item, listState, db }) {
+function Checkbox({ item, listState, db, id }) {
     const [list, setList] = useRecoilState(listState);
     let targetItem = list.find(i => i.id === item.id);
     let allowed = targetItem.allowed
@@ -24,11 +23,11 @@ function Checkbox({ item, listState, db }) {
             console.log("Db not initialized")
         }
         if (!updatedItem.allowed) {
-            updateData(indexDb, "notAllowed", updatedItem).then(() => {
-                console.log("Data updated")
+            insertData(indexDb, `${id}NotAllowed`, updatedItem).then(() => {
+                console.log("Data added")
             })
         } else {
-            deleteData(indexDb, "notAllowed", updatedItem.id).then(() => {
+            deleteData(indexDb, `${id}NotAllowed`, updatedItem.id).then(() => {
                 console.log("Data deleted")
             })
         }
