@@ -24,6 +24,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
                     })
                 }
             })
+            //continue filling in other selections with saved data
         })
     }, [])
 
