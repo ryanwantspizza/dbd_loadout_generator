@@ -76,8 +76,9 @@ export const deleteData = (db, storeName, key) => {
 }
 
 export const getAllData = (db, storeName) => {
+  console.log(`store name: ${storeName}`)
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([storeName], "read")
+    const transaction = db.transaction([storeName], "readwrite")
     const store = transaction.objectStore(storeName)
     const request = store.getAll()
 

@@ -1,23 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue } from 'recoil';
+import { initIndexDb, insertData, deleteData, getData, getAllData  } from "../Utilities/indexDb";
 
-function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAllowed }) {
+function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, emptyAddOnAllowed }) {
     const [message, setMessage] = useState("");
     const options = useRecoilValue(optionsState);
     const addOnOptions = useRecoilValue(addOnsState)
     const allowedOptions = options.filter(o => o.allowed);
     const allowedAddOns = addOnOptions.filter(a => a.allowed);
+    const [indexDb, setIndexDb] = useState(null)
     let additionalOption = emptyAllowed ? 1 : 0;
     let additionalAddOnOption = emptyAddOnAllowed ? 1 : 0;
+    const objectStore = `${id}CurrentSelection`
+
+    useEffect(() => {
+        initIndexDb().then(indexDbInstance => {
+            setIndexDb(indexDbInstance)
+            getAllData(indexDbInstance, objectStore).then(results => {
+                if (selectionType === "Killer" && results) {
+                    let killer = results[0];
+                    getAllData(indexDbInstance, "killerAddOnsCurrentSelection").then(results => {
+                        handleSelectionWithAddOnsMessage(killer, results)
+                    })
+                }
+            })
+        })
+    }, [])
+
+    // Add DB stuff
     function handleClickEvent() {
-        if (type === "Killer" || type === "Item") {
+        if (selectionType === "Killer" || selectionType === "Item") {
+            //delete saved data
             handleSelectionWithAddOns()
-        } else if (type === "Perks") {
+        } else if (selectionType === "Perks") {
             handlePerkSelection()
         } else if (allowedOptions.length > 0) {
             handleSingleSelection()
         } else {
-            setMessage(`No ${type.toLowerCase()} selected`)
+            setMessage(`No ${selectionType.toLowerCase()} selected`)
         }
         
     }
@@ -53,7 +73,7 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
         if (randomNumber !== allowedOptions.length) {
             selection = allowedOptions[randomNumber];
         } else {
-            selection = {name: `No ${type.toLowerCase(0)}`};
+            selection = {name: `No ${selectionType.toLowerCase(0)}`};
         }
 
         setMessage(selection.name)
@@ -76,7 +96,10 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
                 alreadyChosenIds.push(randomNumber)
             }
         }
-
+        chosenAddOns.forEach(addOn => {
+            let addOnStore = id === "killers" ? "killerAddOns" : "survivorItemAddOns"
+            insertData(indexDb, `${addOnStore}CurrentSelection`, addOn)
+        })
         return chosenAddOns
     }
 
@@ -87,16 +110,17 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
             let randomNumber = Math.floor(Math.random() * (allowedOptions.length + additionalOption));
             if (randomNumber !== allowedOptions.length) {
                 selection = allowedOptions[randomNumber];
+                insertData(indexDb, objectStore, selection)
             }
         }
 
         if (selection) {
-            let selection_id = type === "Killer" ? selection.id : selection.item_type_id
+            let selection_id = selectionType === "Killer" ? selection.id : selection.item_selection_id
             let applicableAddOns = getApplicableAddOns(allowedAddOns, selection_id)
             chosenAddOns = handleAddOnSelection(applicableAddOns)
             handleSelectionWithAddOnsMessage(selection, chosenAddOns)
         } else {
-            setMessage(`No ${type.toLowerCase()}`)
+            setMessage(`No ${selectionType.toLowerCase()}`)
         }
 
     }
@@ -113,16 +137,16 @@ function Selector({ type, optionsState, addOnsState, emptyAllowed, emptyAddOnAll
     }
 
     function getApplicableAddOns(addOns, selection_id) {
-        if (type === "Killer") {
+        if (selectionType === "Killer") {
             return addOns.filter(addOn => addOn.killer_id === selection_id)
         } else {
-            return addOns.filter(addOn => addOn.item_type_id === selection_id)
+            return addOns.filter(addOn => addOn.item_selection_id === selection_id)
         }
     }
 
     return (
         <div>
-          <button onClick={handleClickEvent}>{`Get ${type}`}</button>
+          <button onClick={handleClickEvent}>{`Get ${selectionType}`}</button>
           <p>{message}</p>
         </div>
       )

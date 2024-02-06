@@ -12,9 +12,9 @@ function KillerRole() {
         <div>
           <Container>
             <Row>
-              <Col><Selector type={"Killer"} optionsState={states.killersState} addOnsState={states.killerAddOnsState} emptyAddOnAllowed={states.noKillerAddOnAllowedState}/></Col>
-              <Col><Selector type={"Perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot}/></Col>
-              <Col><Selector type={"Offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState}/></Col>
+              <Col><Selector id={"killers"} selectionType={"Killer"} optionsState={states.killersState} addOnsState={states.killerAddOnsState} emptyAddOnAllowed={states.noKillerAddOnAllowedState}/></Col>
+              <Col><Selector id={"killerPerks"} selectionType={"Perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot}/></Col>
+              <Col><Selector id={"killerOfferings"} selectionType={"Offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState}/></Col>
             </Row>
             <Row>
               <Col><List filter={"Killers"} id={"killers"} listState={states.killersState} emptyAllowedState={states.defaultEmptyAllowedState} listUrl={urls.killers}/></Col>
