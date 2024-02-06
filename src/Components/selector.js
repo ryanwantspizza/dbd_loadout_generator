@@ -31,8 +31,11 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
     // Add DB stuff
     function handleClickEvent() {
         if (selectionType === "Killer" || selectionType === "Item") {
-            //delete saved data
+            deleteAllData(indexDb, objectStore)
             handleSelectionWithAddOns()
+        } else if (selectionType === "Itme") {
+
+        
         } else if (selectionType === "Perks") {
             handlePerkSelection()
         } else if (allowedOptions.length > 0) {
