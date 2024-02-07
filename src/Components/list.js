@@ -4,13 +4,14 @@ import { Checkbox } from "./checkbox";
 import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
-import { deleteData, insertData, initIndexDb } from "../Utilities/indexDb"
+import { deleteData, insertData, initIndexDb, getAllData } from "../Utilities/indexDb"
 
 function List({ id, listState, emptyAllowedState, listUrl, filter }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
     const [displayState, setDisplayState] = useState(false)
     const [indexDb, setIndexDb] = useState(null)
+    const objectStore = `${id}NotAllowed`
     useEffect(() => {
         initIndexDb().then(indexDbInstance => {
           setIndexDb(indexDbInstance)
@@ -27,6 +28,11 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
               return 0;
               })
               let filteredData = removeOppositeRoleOfferings(sortedResults);
+              getAllData(indexDbInstance, objectStore).then(savedObjects => {
+                savedObjects.forEach(object => {
+                  filteredData.find(entry => entry.id === object.id).allowed = false
+                })
+              })
               setList(filteredData);
             }
           });
@@ -48,7 +54,7 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
       function handleClick(selectAll) {
         const newListState = list.map(item => {
           if (!selectAll) {
-            insertData(indexDb, `${id}NotAllowed`, item).then(() => {
+            insertData(indexDb, `${id}NotAllowed`, {id: item.id, name: item.name}).then(() => {
               console.log("Data inserted")
           })}
 
