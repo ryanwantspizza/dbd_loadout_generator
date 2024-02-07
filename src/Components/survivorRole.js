@@ -15,9 +15,9 @@ function SurvivorRole() {
       <div>
         <Container>
           <Row>
-            <Col><Selector id={"survivors"} selectionType={"Survivor"} optionsState={states.survivorsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.defaultEmptyAllowedState}/></Col>
-            <Col><Selector id={"survivorPerks"} selectionType={"Perks"} optionsState={states.survivorPerksState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.allowEmptySurvivorPerk}/></Col>
-            <Col><Selector id={"survivorItems"} selectionType={"Item"} optionsState={states.survivorItemsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.noItemAllowedState} emptyAddOnAllowed={states.noItemAddOnAllowedState}/></Col>
+            <Col><Selector id={"survivorCurrentSelection"} selectionType={"Survivor"} optionsState={states.survivorsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.defaultEmptyAllowedState}/></Col>
+            <Col><Selector id={"survivorPerksCurrentSelection"} selectionType={"Perks"} optionsState={states.survivorPerksState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.allowEmptySurvivorPerk}/></Col>
+            <Col><Selector id={"survivorItemsCurrentSelection"} selectionType={"Item"} optionsState={states.survivorItemsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.noItemAllowedState} emptyAddOnAllowed={states.noItemAddOnAllowedState}/></Col>
             <Col><SurvivorOfferingSelector/></Col>
           </Row>
           <Row>

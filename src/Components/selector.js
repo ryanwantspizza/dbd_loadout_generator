@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from 'recoil';
-import { initIndexDb, insertData, deleteData, getData, getAllData  } from "../Utilities/indexDb";
+import { initIndexDb, insertData, clearObjectStore, getAllData } from "../Utilities/indexDb";
 
 function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, emptyAddOnAllowed }) {
     const [message, setMessage] = useState("");
@@ -11,17 +11,26 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
     const [indexDb, setIndexDb] = useState(null)
     let additionalOption = emptyAllowed ? 1 : 0;
     let additionalAddOnOption = emptyAddOnAllowed ? 1 : 0;
-    const objectStore = `${id}CurrentSelection`
+    let addOnStore = id === "killersCurrentSelection" ? "killerAddOnsCurrentSelection" : "survivorItemAddOnsCurrentSelection"
 
     useEffect(() => {
         initIndexDb().then(indexDbInstance => {
             setIndexDb(indexDbInstance)
-            getAllData(indexDbInstance, objectStore).then(results => {
-                if (selectionType === "Killer" && results) {
-                    let killer = results[0];
-                    getAllData(indexDbInstance, "killerAddOnsCurrentSelection").then(results => {
-                        handleSelectionWithAddOnsMessage(killer, results)
+            getAllData(indexDbInstance, id).then(results => {
+                if (!results) {
+                    return
+                } else if (id === "killersCurrentSelection" || id === "survivorItemsCurrentSelection") {
+                    getAllData(indexDbInstance, addOnStore).then(addOnResults => {
+                        handleSelectionWithAddOnsMessage(results[0], addOnResults)
                     })
+                } else if (id.includes("Perks")) {
+                    let savedPerks = []
+                    results.forEach(perk => {
+                        savedPerks.push(perk.name)
+                    })
+                    setMessage(savedPerks.join(", "));
+                } else {
+                    setMessage(results[0].name)
                 }
             })
             //continue filling in other selections with saved data
@@ -30,20 +39,19 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
 
     // Add DB stuff
     function handleClickEvent() {
-        if (selectionType === "Killer" || selectionType === "Item") {
-            deleteAllData(indexDb, objectStore)
-            handleSelectionWithAddOns()
-        } else if (selectionType === "Itme") {
-
-        
-        } else if (selectionType === "Perks") {
-            handlePerkSelection()
-        } else if (allowedOptions.length > 0) {
-            handleSingleSelection()
-        } else {
-            setMessage(`No ${selectionType.toLowerCase()} selected`)
-        }
-        
+        clearObjectStore(indexDb, id).then(() => {
+            if (selectionType === "Killer" || selectionType === "Item") {
+                clearObjectStore(indexDb, addOnStore).then(() => {
+                    handleSelectionWithAddOns()
+                })
+            } else if (selectionType === "Perks") {
+                handlePerkSelection()
+            } else if (allowedOptions.length > 0) {
+                handleSingleSelection()
+            } else {
+                setMessage(`No ${selectionType.toLowerCase()} selected`)
+            }
+        })
     }
 
 
@@ -60,16 +68,11 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         if (randomNumber !== allowedOptions.length) {
           newChosenPerks.push(allowedOptions[randomNumber].name)
           alreadyChosen.push(randomNumber)
+          insertData(indexDb, id, {id: allowedOptions[randomNumber].id, name: allowedOptions[randomNumber].name})
         }
       }
-      handlePerkMessage(newChosenPerks)
+      setMessage(newChosenPerks.join(", "));
     }
-
-
-    function handlePerkMessage(selectedPerks) {
-      setMessage(selectedPerks.join(", "));
-    }
-
 
     function handleSingleSelection() {
         let selection;
@@ -79,7 +82,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         } else {
             selection = {name: `No ${selectionType.toLowerCase(0)}`};
         }
-
+        insertData(indexDb, id, {id: selection.id, name: selection.name})
         setMessage(selection.name)
         
     }
@@ -101,8 +104,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
             }
         }
         chosenAddOns.forEach(addOn => {
-            let addOnStore = id === "killers" ? "killerAddOns" : "survivorItemAddOns"
-            insertData(indexDb, `${addOnStore}CurrentSelection`, addOn)
+            insertData(indexDb, addOnStore, {id: addOn.id, name: addOn.name})
         })
         return chosenAddOns
     }
@@ -114,7 +116,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
             let randomNumber = Math.floor(Math.random() * (allowedOptions.length + additionalOption));
             if (randomNumber !== allowedOptions.length) {
                 selection = allowedOptions[randomNumber];
-                insertData(indexDb, objectStore, selection)
+                insertData(indexDb, id, {id: selection.id, name: selection.name})
             }
         }
 

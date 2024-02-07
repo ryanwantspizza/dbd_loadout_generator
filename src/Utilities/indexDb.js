@@ -65,6 +65,22 @@ export const insertData = (db, storeName, data) => {
   });
 };
 
+export const clearObjectStore = (db, storeName) => {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([storeName], "readwrite")
+    const store = transaction.objectStore(storeName);
+    const request = store.clear();
+
+    request.onsuccess = () => {
+      resolve(`${storeName} cleared`)
+    }
+
+    request.onerror = (event) => {
+      reject("Error clearing data", event.target.errorCode)
+    }
+  })
+}
+
 export const deleteData = (db, storeName, key) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([storeName], "readwrite")
