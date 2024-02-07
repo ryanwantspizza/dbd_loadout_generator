@@ -1,14 +1,23 @@
 const dbName = "dbd_buildout_db";
-const objectStores = [
-  "survivors",
-  "killers",
-  "survivorPerks",
-  "survivorItems",
-  "survivorItemAddOns",
-  "survivorOfferings",
-  "killerPerks",
-  "killerOfferings",
-  "killerAddOns"
+export const objectStores = [
+  "survivorsNotAllowed",
+  "survivorsCurrentSelection",
+  "killersNotAllowed",
+  "killersCurrentSelection",
+  "survivorPerksNotAllowed",
+  "survivorPerksCurrentSelection",
+  "survivorItemsNotAllowed",
+  "survivorItemsCurrentSelection",
+  "survivorItemAddOnsNotAllowed",
+  "survivorItemAddOnsCurrentSelection",
+  "survivorOfferingsNotAllowed",
+  "survivorOfferingsCurrentSelection",
+  "killerPerksNotAllowed",
+  "killerPerksCurrentSelection",
+  "killerOfferingsNotAllowed",
+  "killerOfferingsCurrentSelection",
+  "killerAddOnsNotAllowed",
+  "killerAddOnsCurrentSelection"
 ]
 
 export const initIndexDb = () => {
@@ -27,11 +36,8 @@ export const initIndexDb = () => {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       objectStores.forEach((objectStore) => {
-        if (!db.objectStoreNames.contains(`${objectStore}NotAllowed`)) {
-          db.createObjectStore(`${objectStore}NotAllowed`, { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains(`${objectStore}CurrentSelection`)) {
-          db.createObjectStore(`${objectStore}CurrentSelection`, { keyPath: 'id' });
+        if (!db.objectStoreNames.contains(objectStore)) {
+          db.createObjectStore(objectStore, { keyPath: 'id' });
         }
       })
     };
