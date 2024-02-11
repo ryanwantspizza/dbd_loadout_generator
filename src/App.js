@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RecoilRoot } from 'recoil';
 import Collapse from 'react-bootstrap/Collapse';
 import Form from 'react-bootstrap/Form';
@@ -8,7 +8,14 @@ import { SurvivorRole } from './Components/survivorRole';
 import { KillerRole } from './Components/killerRole';
 
 function App() {
-  const [showSurvivorSection, setShowSurvivorSection] = useState(true);
+  const [showSurvivorSection, setShowSurvivorSection] = useState(() => {
+    const savedRole = localStorage.getItem("survivorRole")
+    return savedRole ? JSON.parse(savedRole) : true
+  });
+
+  useEffect(() => {
+    localStorage.setItem("survivorRole",  showSurvivorSection)
+  }, [showSurvivorSection])
 
   function handleToggle(event) {
     setShowSurvivorSection(event.target.checked);

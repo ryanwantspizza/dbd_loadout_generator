@@ -32,8 +32,8 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
                 savedObjects.forEach(object => {
                   filteredData.find(entry => entry.id === object.id).allowed = false
                 })
+                setList(filteredData)
               })
-              setList(filteredData);
             }
           });
         }).catch(error => {
