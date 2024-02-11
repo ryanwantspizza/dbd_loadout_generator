@@ -43,7 +43,7 @@ export const states = {
     }),
     defaultEmptyAllowedState: atom({
         key: 'defaultEmptyAllowedState',
-        default: "not allowed",
+        default: false
     }),
     killersState: atom({
         key: "killersState",

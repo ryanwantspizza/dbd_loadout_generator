@@ -8,8 +8,9 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
     const addOnOptions = useRecoilValue(addOnsState)
     const allowedOptions = options.filter(o => o.allowed);
     const allowedAddOns = addOnOptions.filter(a => a.allowed);
+    const empty = useRecoilValue(emptyAllowed)
     const [indexDb, setIndexDb] = useState(null)
-    let additionalOption = emptyAllowed ? 1 : 0;
+    let additionalOption = empty ? 1 : 0;
     let additionalAddOnOption = emptyAddOnAllowed ? 1 : 0;
     let addOnStore = id === "killersCurrentSelection" ? "killerAddOnsCurrentSelection" : "survivorItemAddOnsCurrentSelection"
 
@@ -33,11 +34,9 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
                     setMessage(results[0].name)
                 }
             })
-            //continue filling in other selections with saved data
         })
     }, [])
 
-    // Add DB stuff
     function handleClickEvent() {
         clearObjectStore(indexDb, id).then(() => {
             if (selectionType === "Killer" || selectionType === "Item") {
@@ -53,7 +52,6 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
             }
         })
     }
-
 
     function handlePerkSelection() {
         let newChosenPerks = []
@@ -86,7 +84,6 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         setMessage(selection.name)
         
     }
-
 
     function handleAddOnSelection(applicableAddOns) {
         let chosenAddOns = []
@@ -135,7 +132,6 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         if (addOns?.length === 2) {
             setMessage(`${selection.name} + ${addOns[0].name} & ${addOns[1].name}`)
         } else if (addOns?.length === 1) {
-            console.log(addOns)
             setMessage(`${selection.name} + ${addOns[0].name}`)
         } else {
             setMessage(selection.name)

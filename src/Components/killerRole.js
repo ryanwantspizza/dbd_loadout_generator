@@ -12,7 +12,7 @@ function KillerRole() {
         <div>
           <Container>
             <Row>
-              <Col><Selector id={"killersCurrentSelection"} selectionType={"Killer"} optionsState={states.killersState} addOnsState={states.killerAddOnsState} emptyAddOnAllowed={states.noKillerAddOnAllowedState}/></Col>
+              <Col><Selector id={"killersCurrentSelection"} selectionType={"Killer"} optionsState={states.killersState} addOnsState={states.killerAddOnsState} emptyAllowed={states.defaultEmptyAllowedState} emptyAddOnAllowed={states.noKillerAddOnAllowedState}/></Col>
               <Col><Selector id={"killerPerksCurrentSelection"} selectionType={"Perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot}/></Col>
               <Col><Selector id={"killerOfferingsCurrentSelection"} selectionType={"Offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState}/></Col>
             </Row>
