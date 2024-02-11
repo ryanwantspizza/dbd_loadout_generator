@@ -17,6 +17,7 @@ function SurvivorRole() {
             <Col><Selector id={"survivorsCurrentSelection"} selectionType={"Survivor"} optionsState={states.survivorsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.defaultEmptyAllowedState}/></Col>
             <Col><Selector id={"survivorPerksCurrentSelection"} selectionType={"Perks"} optionsState={states.survivorPerksState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.allowEmptySurvivorPerk}/></Col>
             <Col><Selector id={"survivorItemsCurrentSelection"} selectionType={"Item"} optionsState={states.survivorItemsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.noItemAllowedState} emptyAddOnAllowed={states.noItemAddOnAllowedState}/></Col>
+            <Col><Selector id={"survivorOfferingsCurrentSelection"} selectionType={"Offering"} optionsState={states.survivorOfferingsState} addOnsState={states.survivorItemAddOnsState} emptyAllowed={states.noSurvivorOfferingAllowedState}/></Col>
           </Row>
           <Row>
             <Col><List filter={"Survivors"} id={"survivors"} listState={states.survivorsState} emptyAllowedState={states.defaultEmptyAllowedState} listUrl={urls.surivors}/></Col>
