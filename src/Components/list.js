@@ -77,7 +77,7 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
       }
 
       function renderEmptyToggle() {
-        if (emptyAllowed !== "not allowed") {
+        if (id !== "survivors" && id !== "killers") {
           return(
             <Form>
               <div>
