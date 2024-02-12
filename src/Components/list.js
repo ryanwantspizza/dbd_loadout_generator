@@ -4,6 +4,8 @@ import { Checkbox } from "./checkbox";
 import { useRecoilState } from 'recoil';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
+import { states } from "../states";
+import { urls } from "../urls";
 import { deleteData, insertData, initIndexDb, getAllData } from "../Utilities/indexDb"
 
 function List({ id, listState, emptyAllowedState, listUrl, filter }) {
@@ -12,6 +14,7 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
     const [displayState, setDisplayState] = useState(false)
     const [indexDb, setIndexDb] = useState(null)
     const objectStore = `${id}NotAllowed`
+    const [groupedByKiller, setGroupedByKiller] = useState([])
     useEffect(() => {
         initIndexDb().then(indexDbInstance => {
           setIndexDb(indexDbInstance)
@@ -33,9 +36,42 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
                   filteredData.find(entry => entry.id === object.id).allowed = false
                 })
                 setList(filteredData)
+                if (id === "killerAddOns") {
+                  readRemoteFile(urls.killers, {
+                    header: true,
+                    complete: results => {
+                      let sortedResults = results.data.sort((a,b) => {
+                        if (a.name < b.name) {
+                          return -1;
+                      }
+                      if (a.name > b.name) {
+                          return 1;
+                      }
+                      return 0;
+                      })
+
+                      const groupedByKiller = sortedResults.map(killer => {
+                        return {
+                          killer: killer.name,
+                          addOns: filteredData.filter(addOn =>
+                            addOn.killer_id === killer.id
+                          )
+                        }
+                      })
+                      
+                      setGroupedByKiller(groupedByKiller)
+                      
+                    }
+                  })
+                } else {
+                  setList(filteredData)
+                }
               })
             }
           });
+          if (id === "killerAddOns") {
+            
+          }
         }).catch(error => {
           console.error("Failed to initialize indexDb", error)
         });
@@ -102,11 +138,29 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
           {renderEmptyToggle()}
           <button onClick={() => handleClick(true)}>Select All</button>
           <button onClick={() => handleClick(false)}>Unselect All</button>
-          {list.map((item) => {
-            return(
-                <Checkbox key={item.id} item={item} listState={listState} db={indexDb} id={id}/>
-            ) 
-          })}
+          {id === "killerAddOns" ? (
+            groupedByKiller.map((killer) => {
+              return (
+              <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>{killer.killer}</Accordion.Header>
+                <Accordion.Body>
+                  {killer.addOns.map(addOn => {
+                    return (
+                    <Checkbox key={addOn.id} item={addOn} listState={listState} db={indexDb} id={id}/>
+                    )
+                  })}
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+              )
+            })
+          ) : (
+          list.map((item) => {
+            return (
+            <Checkbox key={item.id} item={item} listState={listState} db={indexDb} id={id}/>
+            )
+          }))}
           </Accordion.Body>
           </Accordion.Item>
         </Accordion>

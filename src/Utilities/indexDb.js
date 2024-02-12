@@ -29,7 +29,6 @@ export const initIndexDb = () => {
     };
 
     request.onsuccess = (event) => {
-      console.log("indexDb successfully initialized")
       resolve(event.target.result);
     };
 
@@ -98,7 +97,6 @@ export const deleteData = (db, storeName, key) => {
 }
 
 export const getAllData = (db, storeName) => {
-  console.log(`store name: ${storeName}`)
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([storeName], "readwrite")
     const store = transaction.objectStore(storeName)
