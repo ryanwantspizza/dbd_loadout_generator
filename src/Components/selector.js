@@ -118,7 +118,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         }
 
         if (selection) {
-            let selection_id = selectionType === "Killer" ? selection.id : selection.item_selection_id
+            let selection_id = selectionType === "Killer" ? selection.id : selection.item_type_id
             let applicableAddOns = getApplicableAddOns(allowedAddOns, selection_id)
             chosenAddOns = handleAddOnSelection(applicableAddOns)
             handleSelectionWithAddOnsMessage(selection, chosenAddOns)
@@ -142,7 +142,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         if (selectionType === "Killer") {
             return addOns.filter(addOn => addOn.killer_id === selection_id)
         } else {
-            return addOns.filter(addOn => addOn.item_selection_id === selection_id)
+            return addOns.filter(addOn => addOn.item_type_id === selection_id)
         }
     }
 
