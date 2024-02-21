@@ -108,17 +108,13 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
         setList(newListState)
       }
 
-      function handleEmptyToggle(event) {
-        setEmptyAllowed(event.target.checked)
-      }
-
       function renderEmptyToggle() {
         if (id !== "survivors" && id !== "killers") {
           return(
             <Form>
               <div>
                 <Form.Check
-                  onChange={(event) => handleEmptyToggle(event)}
+                  onChange={(event) => setEmptyAllowed(event.target.checked)}
                   type="switch"
                   id="empty-toggle"
                   label="Allow Empty Slot"
