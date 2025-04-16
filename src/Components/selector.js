@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from 'recoil';
 import { initIndexDb, insertData, clearObjectStore, getAllData } from "../Utilities/indexDb";
+import { PerksSelector } from "./perksSelector";
 
 function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, emptyAddOnAllowed }) {
     const [message, setMessage] = useState("");
@@ -27,11 +28,13 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
                 } else if (id.includes("Perks")) {
                     let savedPerks = []
                     results.forEach(perk => {
-                        savedPerks.push(perk.name)
+                        savedPerks.push(perk)
                     })
-                    setMessage(savedPerks.join(", "));
+                    const messageToReturn = savedPerks.length > 0 ? returnPerkSelector(savedPerks) : ""
+                    setMessage(messageToReturn);
                 } else {
-                    setMessage(results[0].name)
+                    const messageToReturn = results.length > 0 ? results[0].name : ""
+                    setMessage(messageToReturn)
                 }
             })
         })
@@ -58,7 +61,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         let alreadyChosen = []
         let numberOfPerksToChooseFrom = allowedOptions.length < 4 ? allowedOptions.length : 4
 
-      for (let i = 0; i < numberOfPerksToChooseFrom ; i++) {
+      for (let i = 0; i < numberOfPerksToChooseFrom; i++) {
         let randomNumber;
         do {
           randomNumber = Math.floor(Math.random() * (allowedOptions.length + additionalOption));
@@ -69,7 +72,8 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
           insertData(indexDb, id, {id: allowedOptions[randomNumber].id, name: allowedOptions[randomNumber].name})
         }
       }
-      setMessage(newChosenPerks.join(", "));
+
+      setMessage(returnPerkSelector(newChosenPerks))
     }
 
     function handleSingleSelection() {
@@ -134,7 +138,7 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         } else if (addOns?.length === 1) {
             setMessage(`${selection.name} + ${addOns[0].name}`)
         } else {
-            setMessage(selection.name)
+            setMessage("")
         }
     }
 
@@ -146,10 +150,18 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         }
     }
 
+    function returnPerkSelector(perks) {
+        return (
+            <PerksSelector perks={perks} optionsState={optionsState} indexDb={indexDb} dbId={id}/>
+        )
+    }
+
     return (
         <div>
           <button onClick={handleClickEvent}>{`Get ${selectionType}`}</button>
-          <p>{message}</p>
+          <div>
+            {message}
+          </div>
         </div>
       )
 
