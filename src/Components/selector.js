@@ -5,6 +5,7 @@ import { PerksSelector } from "./perksSelector";
 
 function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, emptyAddOnAllowed }) {
     const [message, setMessage] = useState("");
+    const [perks, setPerks] = useState("");
     const options = useRecoilValue(optionsState);
     const addOnOptions = useRecoilValue(addOnsState)
     const allowedOptions = options.filter(o => o.allowed);
@@ -160,7 +161,11 @@ function Selector({ id, selectionType, optionsState, addOnsState, emptyAllowed, 
         <div>
           <button onClick={handleClickEvent}>{`Get ${selectionType}`}</button>
           <div>
-            {message}
+          {selectionType === "Perks" ? (
+                <PerksSelector perks={[]} optionsState={optionsState} indexDb={indexDb} dbId={id} />
+            ) : (
+                message
+            )}
           </div>
         </div>
       )
