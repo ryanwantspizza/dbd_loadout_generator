@@ -1,25 +1,39 @@
-import React, { useState } from "react";
-import { useRecoilValue } from 'recoil';
-import { insertData } from "../Utilities/indexDb";
+import React from "react";
+import { useRecoilValue, useRecoilState, selector } from "recoil";
+import { states } from "../states";
+import { insertData, deleteData } from "../Utilities/indexDb";
 
-function PerksSelector({ perks, optionsState, indexDb, dbId }) {
-  const [perkStates, setPerkStates] = useState(perks);
+function PerksSelector({ optionsState, indexDb, tableId, role }) {
+  const [currentSelectedPerks, setCurrentSelectedPerks] = useRecoilState(
+    role === "killer"
+      ? states.currentlySelectedKillerPerks
+      : states.currentlySelectedSurvivorPerks
+  );
   const options = useRecoilValue(optionsState);
-  const allowedOptions = options.filter(o => o.allowed);
-  function handleRefresh(index) {
-    clearObjectStore(indexDb, id).then(() => {
-      const alreadyChosen = perkStates.map(perk => perk.id);
-      let randomNumber;
-      do {
-        randomNumber = Math.floor(Math.random() * allowedOptions.length);
-      } while (alreadyChosen.includes(randomNumber))
-      setPerkStates(previousPerkStates => {
-        const newPerkStates = [...previousPerkStates];
-        newPerkStates[index] = allowedOptions[randomNumber];
-        insertData(indexDb, dbId, {id: allowedOptions[randomNumber].id, name: allowedOptions[randomNumber].name})
-        return newPerkStates;
-      });
-    });
+  const allowedOptions = options.filter((o) => o.allowed);
+  function handleRefresh(index, perkId) {
+    const alreadyChosen = currentSelectedPerks.map((perk) => perk.id);
+    let randomNumber;
+    console.log(perkId);
+    console.log(alreadyChosen);
+    if (alreadyChosen.length === allowedOptions.length) {
+      return;
+    } else {
+        do {
+          randomNumber = Math.floor(Math.random() * allowedOptions.length);
+          console.log(randomNumber);
+        } while (alreadyChosen.includes(randomNumber));
+        setCurrentSelectedPerks((previousPerkStates) => {
+          const newPerkStates = [...previousPerkStates];
+          newPerkStates[index] = allowedOptions[randomNumber];
+          deleteData(indexDb, tableId, perkId)
+          insertData(indexDb, tableId, {
+            id: allowedOptions[randomNumber].id,
+            name: allowedOptions[randomNumber].name,
+          });
+          return newPerkStates;
+        });
+    }
   }
 
   return (
@@ -32,18 +46,20 @@ function PerksSelector({ perks, optionsState, indexDb, dbId }) {
           </tr>
         </thead>
         <tbody>
-          {perks.map((perk, index) => (
+          {currentSelectedPerks.map((perk, index) => (
             <tr key={index}>
               <td>{perk.name}</td>
               <td>
-                <button onClick={() => handleRefresh(index)}>Refresh</button>
+                <button onClick={() => handleRefresh(index, perk.id)}>
+                  Refresh
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
 export { PerksSelector };
