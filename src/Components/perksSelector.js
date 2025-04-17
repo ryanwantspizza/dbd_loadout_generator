@@ -13,6 +13,7 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
   const allowedOptions = options.filter((o) => o.allowed);
   function handleRefresh(index, perkId) {
     const alreadyChosen = currentSelectedPerks.map((perk) => perk.id);
+    console.log(`alreadyChosen ${alreadyChosen}`);
     let randomNumber;
     console.log(perkId);
     console.log(alreadyChosen);
@@ -20,7 +21,7 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
       return;
     } else {
         do {
-          randomNumber = Math.floor(Math.random() * allowedOptions.length);
+          randomNumber = Math.ceil(Math.random() * allowedOptions.length);
           console.log(randomNumber);
         } while (alreadyChosen.includes(randomNumber));
         setCurrentSelectedPerks((previousPerkStates) => {

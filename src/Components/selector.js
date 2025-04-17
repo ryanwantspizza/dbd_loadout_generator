@@ -87,7 +87,7 @@ function Selector({
     for (let i = 0; i < numberOfPerksToChooseFrom; i++) {
       let randomNumber;
       do {
-        randomNumber = Math.floor(
+        randomNumber = Math.ceil(
           Math.random() * (allowedOptions.length + additionalOption)
         );
       } while (alreadyChosen.includes(randomNumber));
