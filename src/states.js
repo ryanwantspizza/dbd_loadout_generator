@@ -76,5 +76,21 @@ export const states = {
     indexDb: atom({
         key: "indexDb",
         default: null
+    }),
+    currentlySelectedKillerPerks: atom({
+        key: "currentlySelectedKillerPerks",
+        default: []
+    }),
+    currentlySelectedSurvivorPerks: atom({
+        key: "currentlySelectedSurvivorPerks",
+        default: []
+    }),
+    currentlySelectedKillerAddOns: atom({
+        key: "currentlySelectedKillerAddOns",
+        default: []
+    }),
+    currentlySelectedSurvivorAddOns: atom({
+        key: "currentlySelectedSurvivorAddOns",
+        default: []
     })
 }
