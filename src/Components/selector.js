@@ -20,7 +20,9 @@ function Selector({
 }) {
   const [message, setMessage] = useState("");
   const [currentSelectedPerks, setCurrentSelectedPerks] = useRecoilState(
-    role === "killer" ? states.currentlySelectedKillerPerks : states.currentlySelectedSurvivorPerks
+    role === "killer"
+      ? states.currentlySelectedKillerPerks
+      : states.currentlySelectedSurvivorPerks
   );
   const options = useRecoilValue(optionsState);
   const addOnOptions = useRecoilValue(addOnsState);
@@ -87,13 +89,13 @@ function Selector({
     for (let i = 0; i < numberOfPerksToChooseFrom; i++) {
       let randomNumber;
       do {
-        randomNumber = Math.ceil(
+        randomNumber = Math.floor(
           Math.random() * (allowedOptions.length + additionalOption)
         );
-      } while (alreadyChosen.includes(randomNumber));
+      } while (alreadyChosen.includes(allowedOptions[randomNumber]?.id));
       if (randomNumber !== allowedOptions.length) {
         newChosenPerks.push(allowedOptions[randomNumber]);
-        alreadyChosen.push(randomNumber);
+        alreadyChosen.push(allowedOptions[randomNumber]?.id);
         insertData(indexDb, id, {
           id: allowedOptions[randomNumber].id,
           name: allowedOptions[randomNumber].name,

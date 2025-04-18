@@ -20,20 +20,23 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
     if (alreadyChosen.length === allowedOptions.length) {
       return;
     } else {
-        do {
-          randomNumber = Math.ceil(Math.random() * allowedOptions.length);
-          console.log(randomNumber);
-        } while (alreadyChosen.includes(randomNumber));
-        setCurrentSelectedPerks((previousPerkStates) => {
-          const newPerkStates = [...previousPerkStates];
-          newPerkStates[index] = allowedOptions[randomNumber];
-          deleteData(indexDb, tableId, perkId)
-          insertData(indexDb, tableId, {
-            id: allowedOptions[randomNumber].id,
-            name: allowedOptions[randomNumber].name,
+      do {
+        randomNumber = Math.floor(Math.random() * allowedOptions.length);
+        console.log(randomNumber);
+      } while (alreadyChosen.includes(allowedOptions[randomNumber].id));
+      deleteData(indexDb, tableId, perkId).then(() => {
+        const newPerk = allowedOptions[randomNumber];
+        insertData(indexDb, tableId, {
+          id: newPerk.id,
+          name: newPerk.name,
+        }).then(() => {
+          setCurrentSelectedPerks((previousPerkStates) => {
+            const newPerkStates = [...previousPerkStates];
+            newPerkStates[index] = allowedOptions[randomNumber];
+            return newPerkStates;
           });
-          return newPerkStates;
         });
+      });
     }
   }
 
