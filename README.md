@@ -9,3 +9,6 @@ Also, I still need to implement this for the killer role. Right now it's only av
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Deploy
+1. `npm run build`
+2. `npm run deploy`
