@@ -85,12 +85,12 @@ export const states = {
         key: "currentlySelectedSurvivorPerks",
         default: []
     }),
-    currentlySelectedKillerAddOns: atom({
-        key: "currentlySelectedKillerAddOns",
-        default: []
+    currentlySelectedKiller: atom({
+        key: "currentlySelectedKiller",
+        default: {}
     }),
-    currentlySelectedSurvivorAddOns: atom({
-        key: "currentlySelectedSurvivorAddOns",
-        default: []
+    currentlySelectedItem: atom({
+        key: "currentlySelectedItem",
+        default: {}
     })
 }

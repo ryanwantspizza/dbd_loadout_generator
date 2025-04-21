@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilValue, useRecoilState, selector } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { states } from "../states";
 import { insertData, deleteData } from "../Utilities/indexDb";
 

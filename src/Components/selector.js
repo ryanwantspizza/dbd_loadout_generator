@@ -8,6 +8,7 @@ import {
   getAllData,
 } from "../Utilities/indexDb";
 import { PerksSelector } from "./perksSelector";
+import { AddOnsSelector } from "./addOnsSelector";
 
 function Selector({
   id,
@@ -24,6 +25,11 @@ function Selector({
       ? states.currentlySelectedKillerPerks
       : states.currentlySelectedSurvivorPerks
   );
+  const [currentlySelectedKillerOrItem, setCurrentlySelectedKillerOrItem] = useRecoilState(
+    role === "killer"
+        ? states.currentlySelectedKiller
+        : states.currentlySelectedItem
+  )
   const options = useRecoilValue(optionsState);
   const addOnOptions = useRecoilValue(addOnsState);
   const allowedOptions = options.filter((o) => o.allowed);
@@ -48,7 +54,11 @@ function Selector({
           id === "survivorItemsCurrentSelection"
         ) {
           getAllData(indexDbInstance, addOnStore).then((addOnResults) => {
-            handleSelectionWithAddOnsMessage(results[0], addOnResults);
+            let killerOrItem = {
+                killerOrItem: results[0],
+                addOns: addOnResults,
+            }
+            setCurrentlySelectedKillerOrItem(killerOrItem);
           });
         } else if (id.includes("Perks")) {
           let savedPerks = [];
@@ -161,19 +171,13 @@ function Selector({
         selectionType === "Killer" ? selection.id : selection.item_type_id;
       let applicableAddOns = getApplicableAddOns(allowedAddOns, selection_id);
       chosenAddOns = handleAddOnSelection(applicableAddOns);
-      handleSelectionWithAddOnsMessage(selection, chosenAddOns);
+      let killerOrItem = {
+        killerOrItem: selection,
+        addOns: chosenAddOns,
+      }
+      setCurrentlySelectedKillerOrItem(killerOrItem);
     } else {
       setMessage(`No ${selectionType.toLowerCase()}`);
-    }
-  }
-
-  function handleSelectionWithAddOnsMessage(selection, addOns) {
-    if (addOns?.length === 2) {
-      setMessage(`${selection.name} + ${addOns[0].name} & ${addOns[1].name}`);
-    } else if (addOns?.length === 1) {
-      setMessage(`${selection.name} + ${addOns[0].name}`);
-    } else {
-      setMessage("");
     }
   }
 
@@ -185,20 +189,34 @@ function Selector({
     }
   }
 
+  function determineComponent() {
+    if ((selectionType === "Killer" || selectionType === "Item") && Object.keys(currentlySelectedKillerOrItem).length > 0) {
+      return (
+        <AddOnsSelector
+          indexDb={indexDb}
+          tableId={addOnStore}
+          role={role}
+        />
+      );
+    } else if (selectionType === "Perks" && currentSelectedPerks.length > 0) {
+      return (
+        <PerksSelector
+          optionsState={optionsState}
+          indexDb={indexDb}
+          tableId={id}
+          role={role}
+        />
+      );
+    } else {
+        return message
+    }
+  }
+
   return (
     <div>
       <button onClick={handleClickEvent}>{`Get ${selectionType}`}</button>
       <div>
-        {selectionType === "Perks" ? (
-          <PerksSelector
-            optionsState={optionsState}
-            indexDb={indexDb}
-            tableId={id}
-            role={role}
-          />
-        ) : (
-          message
-        )}
+        {determineComponent()}
       </div>
     </div>
   );
