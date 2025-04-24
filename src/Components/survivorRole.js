@@ -7,7 +7,7 @@ import { states } from '../states';
 import { urls } from "../urls"
 import { Selector } from "./selector";
 
-
+// This component renders the UI for the survivor role, including selectors and lists for survivors, perks, items, and offerings.
 function SurvivorRole() {
 
     return(

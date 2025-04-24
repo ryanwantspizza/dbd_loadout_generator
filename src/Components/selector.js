@@ -10,6 +10,16 @@ import {
 import { PerksSelector } from "./perksSelector";
 import { AddOnsSelector } from "./addOnsSelector";
 
+// This component renders a selector for various game elements (e.g., killers, items, perks) and manages their state.
+// Props:
+// - id: The unique identifier for the selector.
+// - selectionType: The type of selection (e.g., 'Killer', 'Item', 'Perks').
+// - optionsState: The Recoil state for the list of available options.
+// - addOnsState: The Recoil state for the list of add-ons.
+// - emptyAllowed: The Recoil state for allowing empty slots.
+// - emptyAddOnAllowed: The Recoil state for allowing empty add-on slots.
+// - role: Specifies whether the role is 'killer' or 'survivor'.
+
 function Selector({
   id,
   selectionType,
@@ -27,8 +37,8 @@ function Selector({
   );
   const [currentlySelectedKillerOrItem, setCurrentlySelectedKillerOrItem] = useRecoilState(
     role === "killer"
-        ? states.currentlySelectedKiller
-        : states.currentlySelectedItem
+      ? states.currentlySelectedKiller
+      : states.currentlySelectedItem
   )
   const options = useRecoilValue(optionsState);
   const addOnOptions = useRecoilValue(addOnsState);
@@ -55,8 +65,8 @@ function Selector({
         ) {
           getAllData(indexDbInstance, addOnStore).then((addOnResults) => {
             let killerOrItem = {
-                killerOrItem: results[0],
-                addOns: addOnResults,
+              killerOrItem: results[0],
+              addOns: addOnResults,
             }
             setCurrentlySelectedKillerOrItem(killerOrItem);
           });
@@ -74,6 +84,8 @@ function Selector({
     });
   }, []);
 
+  // Function: handleClickEvent
+  // Handles the click event to clear the current selection and make a new selection.
   function handleClickEvent() {
     clearObjectStore(indexDb, id).then(() => {
       if (selectionType === "Killer" || selectionType === "Item") {
@@ -90,6 +102,8 @@ function Selector({
     });
   }
 
+  // Function: handlePerkSelection
+  // Selects a random set of perks for the current role.
   function handlePerkSelection() {
     let newChosenPerks = [];
     let alreadyChosen = [];
@@ -115,6 +129,8 @@ function Selector({
     setCurrentSelectedPerks(newChosenPerks);
   }
 
+  // Function: handleSingleSelection
+  // Selects a single random option for the current selection type.
   function handleSingleSelection() {
     let selection;
     let randomNumber = Math.floor(
@@ -129,6 +145,8 @@ function Selector({
     setMessage(selection.name);
   }
 
+  // Function: handleAddOnSelection
+  // Selects a random set of add-ons for the current selection.
   function handleAddOnSelection(applicableAddOns) {
     let chosenAddOns = [];
     let alreadyChosenIds = [];
@@ -153,6 +171,8 @@ function Selector({
     return chosenAddOns;
   }
 
+  // Function: handleSelectionWithAddOns
+  // Handles the selection process for elements that include add-ons.
   function handleSelectionWithAddOns() {
     let selection;
     let chosenAddOns;
@@ -181,6 +201,8 @@ function Selector({
     }
   }
 
+  // Function: getApplicableAddOns
+  // Filters the list of add-ons to find those applicable to the current selection.
   function getApplicableAddOns(addOns, selection_id) {
     if (selectionType === "Killer") {
       return addOns.filter((addOn) => addOn.killer_id === selection_id);
@@ -208,7 +230,7 @@ function Selector({
         />
       );
     } else {
-        return message
+      return message
     }
   }
 

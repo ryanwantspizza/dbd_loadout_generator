@@ -7,6 +7,7 @@ import { List } from "./list"
 import { states } from '../states';
 import { urls } from "../urls"
 
+// This component renders the UI for the killer role, including selectors and lists for killers, perks, offerings, and add-ons.
 function KillerRole() {
     return(
         <div>

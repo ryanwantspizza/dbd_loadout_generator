@@ -40,3 +40,73 @@
     transform: rotate(360deg);
   }
 }
+
+/* General styling to match the Dead by Daylight theme */
+body {
+  background-color: #1a1a1a; /* Dark background */
+  color: #e0e0e0; /* Light text */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Styling for buttons */
+button {
+  background-color: #b71c1c; /* Blood red */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d32f2f; /* Lighter red on hover */
+}
+
+/* Styling for tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table th, table td {
+  border: 1px solid #444;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Ensure table text is readable */
+table th, table td {
+  color: #e0e0e0; /* Light text color for readability */
+}
+
+/* Ensure message text is visible */
+.message {
+  color: #e0e0e0; /* Match table row text color */
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Responsive styling for List and Selector components */
+@media (max-width: 768px) {
+  .list-container, .selector-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  .list-container table, .selector-container table {
+    width: 100%;
+  }
+}

@@ -8,6 +8,14 @@ import { states } from "../states";
 import { urls } from "../urls";
 import { deleteData, insertData, initIndexDb, getAllData } from "../Utilities/indexDb"
 
+// This component renders a list of items with checkboxes and provides functionality to select or unselect all items.
+// Props:
+// - id: The unique identifier for the list.
+// - listState: The Recoil state for the list of items.
+// - emptyAllowedState: The Recoil state for allowing empty slots.
+// - listUrl: The URL to fetch the list data from.
+// - filter: The filter type for the list.
+
 function List({ id, listState, emptyAllowedState, listUrl, filter }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
@@ -77,6 +85,8 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
         });
       }, []);
 
+      // Function: removeOppositeRoleOfferings
+      // Filters out offerings that belong to the opposite role based on the list ID.
       function removeOppositeRoleOfferings(data) {
         if (id === "survivorOfferings") {
           return data.filter(offering => offering.role !== "killer")
@@ -87,6 +97,8 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
         }
       }
     
+      // Function: handleClick
+      // Toggles the selection state of all items in the list.
       function handleClick(selectAll) {
         const newListState = list.map(item => {
           if (!selectAll) {
@@ -108,6 +120,8 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
         setList(newListState)
       }
 
+      // Function: renderEmptyToggle
+      // Renders a toggle switch to allow or disallow empty slots.
       function renderEmptyToggle() {
         if (id !== "survivors" && id !== "killers") {
           return(

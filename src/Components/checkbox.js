@@ -2,6 +2,13 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { insertData, deleteData } from '../Utilities/indexDb';
 
+// This component renders a checkbox for an item and manages its state.
+// Props:
+// - item: The item to be displayed and managed.
+// - listState: The Recoil state for the list of items.
+// - db: The IndexedDB instance for database operations.
+// - id: The ID used for database operations.
+
 function Checkbox({ item, listState, db, id }) {
     const [list, setList] = useRecoilState(listState);
     let targetItem = list.find(i => i.id === item.id);
@@ -9,6 +16,8 @@ function Checkbox({ item, listState, db, id }) {
     const newState = !allowed
     const indexDb = db;
 
+    // Function: handleClickEvent
+    // Toggles the allowed state of the item and updates the database accordingly.
     function handleClickEvent() {
         const updatedItem = {
         ...targetItem,
