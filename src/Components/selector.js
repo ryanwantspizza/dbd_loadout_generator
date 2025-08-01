@@ -40,10 +40,10 @@ function Selector({
       ? states.currentlySelectedKiller
       : states.currentlySelectedItem
   )
-  const options = useRecoilValue(optionsState);
-  const addOnOptions = useRecoilValue(addOnsState);
-  const allowedOptions = options.filter((o) => o.allowed);
-  const allowedAddOns = addOnOptions.filter((a) => a.allowed);
+  const options = useRecoilValue(optionsState) || []; // Ensure options is always an array
+  const addOnOptions = useRecoilValue(addOnsState) || []; // Ensure add-ons are always an array
+  const allowedOptions = options.filter((o) => o?.allowed);
+  const allowedAddOns = addOnOptions.filter((a) => a?.allowed);
   const empty = useRecoilValue(emptyAllowed);
   const [indexDb, setIndexDb] = useState(null);
   let additionalOption = empty ? 1 : 0;

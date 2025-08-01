@@ -12,20 +12,21 @@ import { insertData, deleteData } from "../Utilities/indexDb";
 function AddOnsSelector({ indexDb, tableId, role }) {
   const [currentlySelectedKillerOrItem, setCurrentlySelectedKillerOrItem] = useRecoilState(
     role === "killer"
-        ? states.currentlySelectedKiller
-        : states.currentlySelectedItem
+      ? states.currentlySelectedKiller
+      : states.currentlySelectedItem
   );
   const allowedAddOns = useRecoilValue(
     role === "killer"
       ? states.killerAddOnsState
       : states.survivorItemAddOnsState
+  )?.filter((addOn) => addOn?.allowed) || []; // Defensive check for undefined add-ons
+
+  const applicableAddOns = allowedAddOns.filter((addOn) =>
+    role === "killer"
+      ? addOn.killer_id === currentlySelectedKillerOrItem?.killerOrItem?.id
+      : addOn.item_id === currentlySelectedKillerOrItem?.killerOrItem?.id
   );
 
-  const applicableAddOns = 
-    role === "killer"
-      ? allowedAddOns.filter((addOn) => addOn.killer_id === currentlySelectedKillerOrItem.killerOrItem.id)
-      : allowedAddOns.filter((addOn) => addOn.item_id === currentlySelectedKillerOrItem.killerOrItem.id);
-  
   // Function: handleRefresh
   // Refreshes a specific add-on for the selected killer or item by replacing it with a random applicable add-on.
   // Parameters:
@@ -58,6 +59,10 @@ function AddOnsSelector({ indexDb, tableId, role }) {
         });
       });
     }
+  }
+
+  if (!applicableAddOns.length) {
+    console.warn("No applicable add-ons found.");
   }
 
   return (

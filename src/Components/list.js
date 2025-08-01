@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { readRemoteFile } from "react-papaparse";
 import { Checkbox } from "./checkbox";
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 import { states } from "../states";

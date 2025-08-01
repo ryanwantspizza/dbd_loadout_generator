@@ -13,9 +13,23 @@ function KillerRole() {
         <div>
           <Container>
             <Row>
-              <Col><Selector id={"killersCurrentSelection"} selectionType={"Killer"} optionsState={states.killersState} addOnsState={states.killerAddOnsState} emptyAllowed={states.defaultEmptyAllowedState} emptyAddOnAllowed={states.noKillerAddOnAllowedState} role={"killer"}/></Col>
-              <Col><Selector id={"killerPerksCurrentSelection"} selectionType={"Perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot} role={"killer"}/></Col>
-              <Col><Selector id={"killerOfferingsCurrentSelection"} selectionType={"Offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState} role={"killer"}/></Col>
+              <Col>
+                <Selector
+                  id={"killersCurrentSelection"}
+                  selectionType={"Killer"}
+                  optionsState={states.killersState}
+                  addOnsState={states.killerAddOnsState}
+                  emptyAllowed={states.defaultEmptyAllowedState}
+                  emptyAddOnAllowed={states.noKillerAddOnAllowedState}
+                  role={"killer"}
+                />
+              </Col>
+              <Col>
+                <Selector id={"killerPerksCurrentSelection"} selectionType={"Perks"} optionsState={states.killerPerksState} addOnsState={states.killerAddOnsState} emptyAllowed={states.allowEmptyKillerPerkSlot} role={"killer"}/>
+              </Col>
+              <Col>
+                <Selector id={"killerOfferingsCurrentSelection"} selectionType={"Offering"} optionsState={states.killerOfferingsState} addOnsState={states.killerAddOnsState} emptyAllowed={states.noKillerOfferingAllowedState} role={"killer"}/>
+              </Col>
             </Row>
             <Row>
               <Col><List filter={"Killers"} id={"killers"} listState={states.killersState} emptyAllowedState={states.defaultEmptyAllowedState} listUrl={urls.killers}/></Col>

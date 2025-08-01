@@ -17,32 +17,43 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
       : states.currentlySelectedSurvivorPerks
   );
   const options = useRecoilValue(optionsState);
-  const allowedOptions = options.filter((o) => o.allowed);
+  const allowedOptions = options.filter((o) => o?.allowed); // Defensive check for undefined options
 
   // Function: handleRefresh
   // Refreshes a specific perk for the selected role by replacing it with a random applicable perk.
   function handleRefresh(index, perkId) {
-    const alreadyChosen = currentSelectedPerks.map((perk) => perk.id);
+    if (!currentSelectedPerks || !allowedOptions || allowedOptions.length === 0) {
+      console.warn("No perks or allowed options available for refresh.");
+      return;
+    }
+
+    const alreadyChosen = currentSelectedPerks.map((perk) => perk?.id).filter(Boolean); // Defensive check for undefined perks
     console.log(`alreadyChosen ${alreadyChosen}`);
     let randomNumber;
-    console.log(perkId);
-    console.log(alreadyChosen);
+
     if (alreadyChosen.length === allowedOptions.length) {
+      console.warn("All allowed options are already chosen.");
       return;
     } else {
       do {
         randomNumber = Math.floor(Math.random() * allowedOptions.length);
         console.log(randomNumber);
-      } while (alreadyChosen.includes(allowedOptions[randomNumber].id));
+      } while (alreadyChosen.includes(allowedOptions[randomNumber]?.id)); // Defensive check for undefined IDs
+
+      const newPerk = allowedOptions[randomNumber];
+      if (!newPerk) {
+        console.error("Failed to find a valid perk for refresh.");
+        return;
+      }
+
       deleteData(indexDb, tableId, perkId).then(() => {
-        const newPerk = allowedOptions[randomNumber];
         insertData(indexDb, tableId, {
           id: newPerk.id,
           name: newPerk.name,
         }).then(() => {
           setCurrentSelectedPerks((previousPerkStates) => {
             const newPerkStates = [...previousPerkStates];
-            newPerkStates[index] = allowedOptions[randomNumber];
+            newPerkStates[index] = newPerk;
             return newPerkStates;
           });
         });
@@ -60,16 +71,20 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
           </tr>
         </thead>
         <tbody>
-          {currentSelectedPerks.map((perk, index) => (
+          {currentSelectedPerks?.map((perk, index) => (
             <tr key={index}>
-              <td>{perk.name}</td>
+              <td>{perk?.name || "Unknown Perk"}</td> {/* Defensive check for undefined perk name */}
               <td>
-                <button onClick={() => handleRefresh(index, perk.id)}>
+                <button onClick={() => handleRefresh(index, perk?.id)}>
                   Refresh
                 </button>
               </td>
             </tr>
-          ))}
+          )) || (
+            <tr>
+              <td colSpan="2">No perks selected.</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
