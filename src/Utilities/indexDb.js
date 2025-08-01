@@ -1,4 +1,6 @@
 const dbName = "dbd_buildout_db";
+const dbVersion = 2; // Increment this version number on each deploy
+
 export const objectStores = [
   "survivorsNotAllowed",
   "survivorsCurrentSelection",
@@ -18,11 +20,11 @@ export const objectStores = [
   "killerOfferingsCurrentSelection",
   "killerAddOnsNotAllowed",
   "killerAddOnsCurrentSelection"
-]
+];
 
 export const initIndexDb = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(dbName, 1);
+    const request = indexedDB.open(dbName, dbVersion);
 
     request.onerror = (event) => {
       reject("IndexedDB error: " + event.target.errorCode);
@@ -34,11 +36,20 @@ export const initIndexDb = () => {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      objectStores.forEach((objectStore) => {
-        if (!db.objectStoreNames.contains(objectStore)) {
-          db.createObjectStore(objectStore, { keyPath: 'id' });
+
+      // Cleanup logic: Delete old object stores or clear data
+      objectStores.forEach((store) => {
+        if (db.objectStoreNames.contains(store)) {
+          db.deleteObjectStore(store); // Delete the store if it exists
         }
-      })
+      });
+
+      // Recreate object stores
+      objectStores.forEach((store) => {
+        db.createObjectStore(store, { keyPath: "id" });
+      });
+
+      console.log("Database upgraded and cleaned up.");
     };
   });
 };
