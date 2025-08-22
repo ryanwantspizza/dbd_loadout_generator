@@ -97,6 +97,10 @@ table th, table td {
   margin-top: 10px;
 }
 
+.selector-container {
+  color: #e0e0e0;
+}
+
 /* Responsive styling for List and Selector components */
 @media (max-width: 768px) {
   .list-container, .selector-container {

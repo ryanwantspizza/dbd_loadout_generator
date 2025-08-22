@@ -30,18 +30,26 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
             header: true,
             complete: (results) => {
               let sortedResults = results.data.sort((a,b) => {
-                if (a.name < b.name) {
+                if (a?.name < b?.name) {
                   return -1;
               }
-              if (a.name > b.name) {
+              if (a?.name > b?.name) {
                   return 1;
               }
               return 0;
               })
               let filteredData = removeOppositeRoleOfferings(sortedResults);
               getAllData(indexDbInstance, objectStore).then(savedObjects => {
-                savedObjects.forEach(object => {
-                  filteredData.find(entry => entry.id === object.id).allowed = false
+                // Delete any rows that don't have a corresponding entry in the filteredData
+                const toDelete = savedObjects.filter(object => !filteredData.find(entry => entry?.name === object?.name));
+                Promise.all(toDelete.map(object => deleteData(indexDbInstance, objectStore, object?.id))).then(() => {
+                  console.log("Deleted unused objects");
+                });
+                const newSaveObjects = savedObjects.filter(object => filteredData.find(entry => entry?.id === object?.id));
+                
+                // Why am I setting all saved objects to now allowed?
+                newSaveObjects.forEach(object => {
+                  filteredData.find(entry => entry?.id === object?.id).allowed = false
                 })
                 setList(filteredData)
                 if (id === "killerAddOns") {
@@ -49,10 +57,10 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
                     header: true,
                     complete: results => {
                       let sortedResults = results.data.sort((a,b) => {
-                        if (a.name < b.name) {
+                        if (a?.name < b?.name) {
                           return -1;
                       }
-                      if (a.name > b.name) {
+                      if (a?.name > b?.name) {
                           return 1;
                       }
                       return 0;
@@ -60,9 +68,9 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
 
                       const groupedByKiller = sortedResults.map(killer => {
                         return {
-                          killer: killer.name,
+                          killer: killer?.name,
                           addOns: filteredData.filter(addOn =>
-                            addOn.killer_id === killer.id
+                            addOn.killer_id === killer?.id
                           )
                         }
                       })
@@ -77,9 +85,6 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
               })
             }
           });
-          if (id === "killerAddOns") {
-            
-          }
         }).catch(error => {
           console.error("Failed to initialize indexDb", error)
         });
@@ -102,12 +107,12 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
       function handleClick(selectAll) {
         const newListState = list.map(item => {
           if (!selectAll) {
-            insertData(indexDb, `${id}NotAllowed`, {id: item.id, name: item.name}).then(() => {
+            insertData(indexDb, `${id}NotAllowed`, {id: item?.id, name: item?.name}).then(() => {
               console.log("Data inserted")
           })}
 
           if (selectAll) {
-            deleteData(indexDb, `${id}NotAllowed`, item.id).then(() => {
+            deleteData(indexDb, `${id}NotAllowed`, item?.id).then(() => {
               console.log("Data deleted")
             })
           }
@@ -157,7 +162,7 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
                 <Accordion.Body>
                   {killer.addOns.map(addOn => {
                     return (
-                    <Checkbox key={addOn.id} item={addOn} listState={listState} db={indexDb} id={id}/>
+                    <Checkbox key={addOn?.id} item={addOn} listState={listState} db={indexDb} id={id}/>
                     )
                   })}
                 </Accordion.Body>
@@ -168,7 +173,7 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
           ) : (
           list.map((item) => {
             return (
-            <Checkbox key={item.id} item={item} listState={listState} db={indexDb} id={id}/>
+            <Checkbox key={item?.id} item={item} listState={listState} db={indexDb} id={id}/>
             )
           }))}
           </Accordion.Body>

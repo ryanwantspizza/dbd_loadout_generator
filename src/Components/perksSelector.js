@@ -48,8 +48,8 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
 
       deleteData(indexDb, tableId, perkId).then(() => {
         insertData(indexDb, tableId, {
-          id: newPerk.id,
-          name: newPerk.name,
+          id: newPerk?.id,
+          name: newPerk?.name,
         }).then(() => {
           setCurrentSelectedPerks((previousPerkStates) => {
             const newPerkStates = [...previousPerkStates];

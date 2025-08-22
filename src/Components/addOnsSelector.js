@@ -20,11 +20,11 @@ function AddOnsSelector({ indexDb, tableId, role }) {
       ? states.killerAddOnsState
       : states.survivorItemAddOnsState
   )?.filter((addOn) => addOn?.allowed) || []; // Defensive check for undefined add-ons
-
+  
   const applicableAddOns = allowedAddOns.filter((addOn) =>
     role === "killer"
       ? addOn.killer_id === currentlySelectedKillerOrItem?.killerOrItem?.id
-      : addOn.item_id === currentlySelectedKillerOrItem?.killerOrItem?.id
+      : addOn.item_type_id === currentlySelectedKillerOrItem?.killerOrItem?.item_type_id
   );
 
   // Function: handleRefresh
@@ -33,19 +33,19 @@ function AddOnsSelector({ indexDb, tableId, role }) {
   // - index: The index of the add-on to refresh.
   // - addOnId: The ID of the add-on to be replaced.
   function handleRefresh(index, addOnId) {
-    const alreadyChosen = currentlySelectedKillerOrItem.addOns.map((addOn) => addOn.id);
+    const alreadyChosen = currentlySelectedKillerOrItem.addOns.map((addOn) => addOn?.id);
     let randomNumber;
     if (alreadyChosen.length === applicableAddOns.length) {
       return;
     } else {
       do {
         randomNumber = Math.floor(Math.random() * applicableAddOns.length);
-      } while (alreadyChosen.includes(applicableAddOns[randomNumber].id));
+      } while (alreadyChosen.includes(applicableAddOns[randomNumber]?.id));
       deleteData(indexDb, tableId, addOnId).then(() => {
         const newAddOn = applicableAddOns[randomNumber];
         insertData(indexDb, tableId, {
-          id: newAddOn.id,
-          name: newAddOn.name,
+          id: newAddOn?.id,
+          name: newAddOn?.name,
         }).then(() => {
           setCurrentlySelectedKillerOrItem((previousKillerOrItemState) => {
             const newAddOns = [...previousKillerOrItemState.addOns];
@@ -56,7 +56,7 @@ function AddOnsSelector({ indexDb, tableId, role }) {
             }
             return newKillerOrItemState;
           });
-        });
+        }).catch(err => console.warn("insertData skipped/failed:", err));
       });
     }
   }
@@ -67,7 +67,7 @@ function AddOnsSelector({ indexDb, tableId, role }) {
 
   return (
     <div>
-      <p>{currentlySelectedKillerOrItem.killerOrItem.name}</p>
+      <p>{currentlySelectedKillerOrItem.killerOrItem?.name}</p>
       <table>
         <thead>
           <tr>
@@ -78,9 +78,9 @@ function AddOnsSelector({ indexDb, tableId, role }) {
         <tbody>
           {currentlySelectedKillerOrItem.addOns.map((addOn, index) => (
             <tr key={index}>
-              <td>{addOn.name}</td>
+              <td>{addOn?.name}</td>
               <td>
-                <button onClick={() => handleRefresh(index, addOn.id)}>
+                <button onClick={() => handleRefresh(index, addOn?.id)}>
                   Refresh
                 </button>
               </td>

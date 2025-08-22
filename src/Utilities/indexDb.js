@@ -58,8 +58,8 @@ export const insertData = (db, storeName, data) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([storeName], "readwrite");
     const store = transaction.objectStore(storeName);
-
-    store.get(data.id).onsuccess = (event) => {
+    console.log("data", data);
+    store.get(data?.id).onsuccess = (event) => {
       if (event.target.result) {
         resolve("Data already exists")
       } else {

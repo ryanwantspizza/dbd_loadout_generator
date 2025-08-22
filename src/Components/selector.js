@@ -77,7 +77,7 @@ function Selector({
           });
           setCurrentSelectedPerks(savedPerks);
         } else {
-          const messageToReturn = results.length > 0 ? results[0].name : "";
+          const messageToReturn = results.length > 0 ? results[0]?.name : "";
           setMessage(messageToReturn);
         }
       });
@@ -121,8 +121,8 @@ function Selector({
         newChosenPerks.push(allowedOptions[randomNumber]);
         alreadyChosen.push(allowedOptions[randomNumber]?.id);
         insertData(indexDb, id, {
-          id: allowedOptions[randomNumber].id,
-          name: allowedOptions[randomNumber].name,
+          id: allowedOptions[randomNumber]?.id,
+          name: allowedOptions[randomNumber]?.name,
         });
       }
     }
@@ -141,8 +141,8 @@ function Selector({
     } else {
       selection = { name: `No ${selectionType.toLowerCase(0)}` };
     }
-    insertData(indexDb, id, { id: selection.id, name: selection.name });
-    setMessage(selection.name);
+    insertData(indexDb, id, { id: selection?.id, name: selection?.name });
+    setMessage(selection?.name);
   }
 
   // Function: handleAddOnSelection
@@ -166,7 +166,7 @@ function Selector({
       }
     }
     chosenAddOns.forEach((addOn) => {
-      insertData(indexDb, addOnStore, { id: addOn.id, name: addOn.name });
+      insertData(indexDb, addOnStore, { id: addOn?.id, name: addOn?.name });
     });
     return chosenAddOns;
   }
@@ -182,13 +182,13 @@ function Selector({
       );
       if (randomNumber !== allowedOptions.length) {
         selection = allowedOptions[randomNumber];
-        insertData(indexDb, id, { id: selection.id, name: selection.name });
+        insertData(indexDb, id, { id: selection?.id, name: selection?.name });
       }
     }
 
     if (selection) {
       let selection_id =
-        selectionType === "Killer" ? selection.id : selection.item_type_id;
+        selectionType === "Killer" ? selection?.id : selection.item_type_id;
       let applicableAddOns = getApplicableAddOns(allowedAddOns, selection_id);
       chosenAddOns = handleAddOnSelection(applicableAddOns);
       let killerOrItem = {
@@ -212,7 +212,7 @@ function Selector({
   }
 
   function determineComponent() {
-    if ((selectionType === "Killer" || selectionType === "Item") && Object.keys(currentlySelectedKillerOrItem).length > 0) {
+    if ((selectionType === "Killer" || selectionType === "Item") && currentlySelectedKillerOrItem.addOns && Object.keys(currentlySelectedKillerOrItem.addOns).length > 0) {
       return (
         <AddOnsSelector
           indexDb={indexDb}
@@ -237,7 +237,7 @@ function Selector({
   return (
     <div>
       <button onClick={handleClickEvent}>{`Get ${selectionType}`}</button>
-      <div>
+      <div className="selector-container">
         {determineComponent()}
       </div>
     </div>

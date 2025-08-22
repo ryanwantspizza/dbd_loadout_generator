@@ -11,7 +11,7 @@ import { insertData, deleteData } from '../Utilities/indexDb';
 
 function Checkbox({ item, listState, db, id }) {
     const [list, setList] = useRecoilState(listState);
-    let targetItem = list.find(i => i.id === item.id);
+    let targetItem = list.find(i => i?.id === item?.id);
     let allowed = targetItem.allowed
     const newState = !allowed
     const indexDb = db;
@@ -24,7 +24,7 @@ function Checkbox({ item, listState, db, id }) {
         allowed: newState
         };
         setList(currentState => {
-            const updatedItems = currentState.map(i => (i.id === item.id ? updatedItem : i));
+            const updatedItems = currentState.map(i => (i?.id === item?.id ? updatedItem : i));
             return updatedItems;
         });
 
@@ -36,7 +36,7 @@ function Checkbox({ item, listState, db, id }) {
                 console.log("Data added")
             })
         } else {
-            deleteData(indexDb, `${id}NotAllowed`, updatedItem.id).then(() => {
+            deleteData(indexDb, `${id}NotAllowed`, updatedItem?.id).then(() => {
                 console.log("Data deleted")
             })
         }
@@ -46,8 +46,8 @@ function Checkbox({ item, listState, db, id }) {
     return (
         <div>
             <label>
-                <input type="checkbox" id={item.id} checked={allowed} onChange={handleClickEvent} style={{ marginRight: '8px' }}/>
-                {item.name}
+                <input type="checkbox" id={item?.id} checked={allowed} onChange={handleClickEvent} style={{ marginRight: '8px' }}/>
+                {item?.name}
             </label>
         </div>
     )
