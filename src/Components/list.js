@@ -145,38 +145,38 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
         }
       }
     
-      return(
-        <Accordion>
+      return (
+        <Accordion className="styled-accordion">
           <Accordion.Item eventKey="0">
-          <Accordion.Header>{`Filter ${filter}`}</Accordion.Header>
-          <Accordion.Body>
-          {renderEmptyToggle()}
-          <button onClick={() => handleClick(true)}>Select All</button>
-          <button onClick={() => handleClick(false)}>Unselect All</button>
-          {id === "killerAddOns" ? (
-            groupedByKiller.map((killer) => {
-              return (
-              <Accordion>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>{killer.killer}</Accordion.Header>
-                <Accordion.Body>
-                  {killer.addOns.map(addOn => {
-                    return (
-                    <Checkbox key={addOn?.id} item={addOn} listState={listState} db={indexDb} id={id}/>
-                    )
-                  })}
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-              )
-            })
-          ) : (
-          list.map((item) => {
-            return (
-            <Checkbox key={item?.id} item={item} listState={listState} db={indexDb} id={id}/>
-            )
-          }))}
-          </Accordion.Body>
+            <Accordion.Header className="styled-accordion-header">{`Filter ${filter}`}</Accordion.Header>
+            <Accordion.Body>
+              {renderEmptyToggle()}
+              <button onClick={() => handleClick(true)}>Select All</button>
+              <button onClick={() => handleClick(false)}>Unselect All</button>
+              {id === "killerAddOns" ? (
+                groupedByKiller.map((killer) => {
+                  return (
+                  <Accordion className="styled-accordion">
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>{killer.killer}</Accordion.Header>
+                    <Accordion.Body>
+                      {killer.addOns.map(addOn => {
+                        return (
+                        <Checkbox key={addOn?.id} item={addOn} listState={listState} db={indexDb} id={id}/>
+                        )
+                      })}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+                  )
+                })
+              ) : (
+              list.map((item) => {
+                return (
+                <Checkbox key={item?.id} item={item} listState={listState} db={indexDb} id={id}/>
+                )
+              }))}
+            </Accordion.Body>
           </Accordion.Item>
         </Accordion>
       )

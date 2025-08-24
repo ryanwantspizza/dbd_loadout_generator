@@ -101,6 +101,11 @@ table th, table td {
   color: #e0e0e0;
 }
 
+.killer-survivor-selection {
+  font-size: 50px;
+  color: #e0e0e0;
+}
+
 /* Responsive styling for List and Selector components */
 @media (max-width: 768px) {
   .list-container, .selector-container {
@@ -113,4 +118,253 @@ table th, table td {
   .list-container table, .selector-container table {
     width: 100%;
   }
+}
+
+/* Accordion styling to match table cells */
+.styled-accordion .accordion-item {
+  border: 1px solid #444;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  background: transparent;
+}
+
+.styled-accordion .accordion-button {
+  background: transparent;
+  color: var(--selected-text-color);
+  padding: 10px;
+  border: none;
+  box-shadow: none;
+}
+
+.styled-accordion .accordion-button:not(.collapsed) {
+  /* keep consistent when expanded */
+  background: rgba(255,255,255,0.02);
+}
+
+.styled-accordion .accordion-body {
+  color: var(--selected-text-color);
+  padding: 10px;
+  border-top: 1px solid #444;
+}
+
+/* If you render items inside the accordion that use table layout, keep the same table rules */
+.styled-accordion table th,
+.styled-accordion table td {
+  color: var(--selected-text-color);
+}
+
+/* ensure variable exists */
+:root {
+  --selected-text-color: #e0e0e0;
+  /* fallback values if you don't already have these variables */
+  --button-bg: #222;
+  --button-color: #e0e0e0;
+  --button-border: #444;
+  --button-bg-hover: rgba(255,255,255,0.03);
+  --button-color-hover: #ffffff;
+}
+
+/* make styled-accordion override Bootstrap */
+.styled-accordion,
+.styled-accordion .accordion-item,
+.styled-accordion .accordion-header,
+.styled-accordion .accordion-button,
+.styled-accordion .accordion-body {
+  color: var(--selected-text-color) !important;
+  background: transparent !important;
+  border-color: #444 !important;
+}
+
+/* specifically override the button rules Bootstrap applies */
+.styled-accordion .accordion-button {
+  color: var(--button-color) !important;
+  background: var(--button-bg) !important;
+  border: 1px solid var(--button-border) !important;
+  padding: 0.5rem 0.75rem !important;
+  box-shadow: none !important;
+  transition: background-color 150ms ease, color 150ms ease !important;
+  border-radius: 0 !important; /* keep consistent with table edges */
+}
+
+/* hover / focus / expanded states */
+.styled-accordion .accordion-button:hover,
+.styled-accordion .accordion-button:focus,
+.styled-accordion .accordion-button:not(.collapsed) {
+  background: var(--button-bg-hover) !important;
+  color: var(--button-color-hover) !important;
+}
+
+/* Stronger override: ensure header and all children use the same hover/focus/expanded colors */
+.styled-accordion .accordion-button:hover,
+.styled-accordion .accordion-button:focus,
+.styled-accordion .accordion-button:not(.collapsed),
+.styled-accordion .accordion-button:hover *,
+.styled-accordion .accordion-button:focus *,
+.styled-accordion .accordion-button:not(.collapsed) * {
+  background: var(--button-bg-hover) !important;
+  color: var(--button-color-hover) !important;
+}
+
+/* make sure text inside header (title, icons) inherits */
+.styled-accordion .accordion-button *,
+.styled-accordion .accordion-button:after {
+  color: inherit !important;
+}
+
+/* keep body text matching table/button color */
+.styled-accordion .accordion-body,
+.styled-accordion table th,
+.styled-accordion table td {
+  color: var(--button-color) !important;
+}
+
+/* ensure links/buttons inside also inherit the color */
+.styled-accordion a,
+.styled-accordion button,
+.styled-accordion label {
+  color: var(--selected-text-color) !important;
+}
+
+/* Remove rounded corners for accordions to match table edges */
+.styled-accordion .accordion-item {
+  border-radius: 0 !important;
+  overflow: visible; /* allow children to show without clipping */
+}
+
+.styled-accordion .accordion-button {
+  border-radius: 0 !important;
+}
+
+.styled-accordion .accordion-body {
+  border-radius: 0 !important;
+}
+
+/* Strong override to ensure accordion header text inherits the button color */
+.styled-accordion .accordion-button,
+.styled-accordion .accordion-button *,
+.styled-accordion .accordion-button .accordion-header,
+.styled-accordion .accordion-button .btn,
+.styled-accordion .accordion-button a,
+.styled-accordion .accordion-button svg {
+  color: var(--button-color) !important;
+  background: var(--button-bg) !important;
+}
+
+/* Ensure variables are correct */
+:root {
+  --button-color: #e0e0e0;        /* normal header text */
+  --button-color-hover: #ffffff;  /* hover/focus header text */
+  --button-bg-hover: rgba(255,255,255,0.03);
+}
+
+/* Force header and all descendants to use the header color and inherit on hover/focus */
+.styled-accordion .accordion-button,
+.styled-accordion .accordion-button * {
+  color: var(--button-color) !important;
+  background: transparent !important;
+}
+
+.styled-accordion .accordion-button:hover,
+.styled-accordion .accordion-button:focus,
+.styled-accordion .accordion-button:not(.collapsed) {
+  background: var(--button-bg-hover) !important;
+  color: var(--button-color-hover) !important;
+}
+
+/* make children inherit the computed header color so they can't stay black */
+.styled-accordion .accordion-button:hover *,
+.styled-accordion .accordion-button:focus *,
+.styled-accordion .accordion-button:not(.collapsed) * {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+/* Strong header-specific overrides to match button styles and hover behavior */
+.styled-accordion .styled-accordion-header,
+.styled-accordion .styled-accordion-header .accordion-button {
+  color: var(--button-color) !important;
+  background: var(--button-bg) !important;
+  border: 1px solid var(--button-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: background-color 150ms ease, color 150ms ease !important;
+}
+
+/* Ensure all child nodes inherit header color (icons, spans, SVGs, etc.) */
+.styled-accordion .styled-accordion-header *,
+.styled-accordion .styled-accordion-header .accordion-button * {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+/* Hover / focus / expanded state (and ensure children inherit the hover color) */
+.styled-accordion .styled-accordion-header .accordion-button:hover,
+.styled-accordion .styled-accordion-header .accordion-button:focus,
+.styled-accordion .styled-accordion-header .accordion-button:not(.collapsed),
+.styled-accordion .styled-accordion-header .accordion-button:hover *,
+.styled-accordion .styled-accordion-header .accordion-button:focus *,
+.styled-accordion .styled-accordion-header .accordion-button:not(.collapsed) * {
+  background: var(--button-bg-hover) !important;
+  color: var(--button-color-hover) !important;
+}
+
+/* If nested accordions exist, keep their headers consistent too */
+.styled-accordion .accordion-item .styled-accordion-header,
+.styled-accordion .accordion-item .styled-accordion-header .accordion-button {
+  border-radius: 0 !important;
+  color: var(--button-color) !important;
+}
+
+/* Ensure red button colors for accordion headers and force descendants to inherit */
+:root {
+  --button-bg: #b71c1c;        /* desired red */
+  --button-bg-hover: #d32f2f;  /* hover red */
+  --button-color: #ffffff;     /* normal text on button */
+  --button-color-hover: #ffffff;
+}
+
+/* Target header class and .accordion-button explicitly, last rules win */
+.styled-accordion .styled-accordion-header .accordion-button,
+.styled-accordion .accordion-button {
+  background: var(--button-bg) !important;
+  color: var(--button-color) !important;
+  border: 1px solid var(--button-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Hover / focus / expanded states */
+.styled-accordion .styled-accordion-header .accordion-button:hover,
+.styled-accordion .styled-accordion-header .accordion-button:focus,
+.styled-accordion .styled-accordion-header .accordion-button:not(.collapsed),
+.styled-accordion .accordion-button:hover,
+.styled-accordion .accordion-button:focus,
+.styled-accordion .accordion-button:not(.collapsed) {
+  background: var(--button-bg-hover) !important;
+  color: var(--button-color-hover) !important;
+}
+
+/* Force all child nodes (icons, spans, SVGs) to inherit the computed color */
+.styled-accordion .styled-accordion-header .accordion-button *,
+.styled-accordion .styled-accordion-header .accordion-button svg,
+.styled-accordion .styled-accordion-header .accordion-button .bi,
+.styled-accordion .accordion-button * {
+  color: inherit !important;
+  background: transparent !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Make the accordion chevron match the header text color */
+.styled-accordion .accordion-button::after,
+.styled-accordion .styled-accordion-header .accordion-button::after {
+  color: inherit !important;
+  fill: currentColor !important;
+  transition: transform 0.2s ease, color 150ms ease !important;
+}
+
+/* preserve rotation when expanded */
+.styled-accordion .accordion-button:not(.collapsed)::after {
+  transform: rotate(180deg) !important;
 }

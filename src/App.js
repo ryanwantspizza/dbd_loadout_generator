@@ -25,7 +25,7 @@ function App() {
     <div>
       <RecoilRoot>
         <Form>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className='killer-survivor-selection' style={{ display: 'flex', justifyContent: 'center' }}>
             <span style={{ marginRight: '0.5rem' }}>Killers</span>
             <Form.Check
               onChange={(event) => handleToggle(event)}
