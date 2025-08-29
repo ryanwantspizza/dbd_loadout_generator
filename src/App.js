@@ -17,6 +17,11 @@ function App() {
     localStorage.setItem("survivorRole",  showSurvivorSection)
   }, [showSurvivorSection])
 
+  useEffect(() => {
+    document.body.classList.toggle('select-survivors', showSurvivorSection);
+    document.body.classList.toggle('select-killers', !showSurvivorSection);
+  }, [showSurvivorSection]);
+
   function handleToggle(event) {
     setShowSurvivorSection(event.target.checked);
   }
