@@ -19,76 +19,77 @@ import { deleteData, insertData, initIndexDb, getAllData } from "../Utilities/in
 function List({ id, listState, emptyAllowedState, listUrl, filter }) {
     const [list, setList] = useRecoilState(listState)
     const [emptyAllowed, setEmptyAllowed] = useRecoilState(emptyAllowedState)
-    const [displayState, setDisplayState] = useState(false)
+    const [displayState, setDisplayState] = useState(localStorage.getItem(`${id}AccordionState`))
     const [indexDb, setIndexDb] = useState(null)
     const objectStore = `${id}NotAllowed`
     const [groupedByKiller, setGroupedByKiller] = useState([])
     useEffect(() => {
-        initIndexDb().then(indexDbInstance => {
-          setIndexDb(indexDbInstance)
-          readRemoteFile(listUrl, {
-            header: true,
-            complete: (results) => {
-              let sortedResults = results.data.sort((a,b) => {
-                if (a?.name < b?.name) {
-                  return -1;
-              }
-              if (a?.name > b?.name) {
-                  return 1;
-              }
-              return 0;
-              })
-              let filteredData = removeOppositeRoleOfferings(sortedResults);
-              getAllData(indexDbInstance, objectStore).then(savedObjects => {
-                // Delete any rows that don't have a corresponding entry in the filteredData
-                const toDelete = savedObjects.filter(object => !filteredData.find(entry => entry?.name === object?.name));
-                Promise.all(toDelete.map(object => deleteData(indexDbInstance, objectStore, object?.id))).then(() => {
-                  console.log("Deleted unused objects");
-                });
-                const newSaveObjects = savedObjects.filter(object => filteredData.find(entry => entry?.id === object?.id));
-                
-                // Why am I setting all saved objects to now allowed?
-                newSaveObjects.forEach(object => {
-                  filteredData.find(entry => entry?.id === object?.id).allowed = false
-                })
-                setList(filteredData)
-                if (id === "killerAddOns") {
-                  readRemoteFile(urls.killers, {
-                    header: true,
-                    complete: results => {
-                      let sortedResults = results.data.sort((a,b) => {
-                        if (a?.name < b?.name) {
-                          return -1;
-                      }
-                      if (a?.name > b?.name) {
-                          return 1;
-                      }
-                      return 0;
-                      })
-
-                      const groupedByKiller = sortedResults.map(killer => {
-                        return {
-                          killer: killer?.name,
-                          addOns: filteredData.filter(addOn =>
-                            addOn.killer_id === killer?.id
-                          )
-                        }
-                      })
-                      
-                      setGroupedByKiller(groupedByKiller)
-                      
-                    }
-                  })
-                } else {
-                  setList(filteredData)
-                }
-              })
+      initIndexDb().then(indexDbInstance => {
+        setIndexDb(indexDbInstance)
+        readRemoteFile(listUrl, {
+          header: true,
+          complete: (results) => {
+            let sortedResults = results.data.sort((a,b) => {
+              if (a?.name < b?.name) {
+                return -1;
             }
-          });
-        }).catch(error => {
-          console.error("Failed to initialize indexDb", error)
+            if (a?.name > b?.name) {
+                return 1;
+            }
+            return 0;
+            })
+            let filteredData = removeOppositeRoleOfferings(sortedResults);
+            getAllData(indexDbInstance, objectStore).then(savedObjects => {
+              // Delete any rows that don't have a corresponding entry in the filteredData
+              const toDelete = savedObjects.filter(object => !filteredData.find(entry => entry?.name === object?.name));
+              Promise.all(toDelete.map(object => deleteData(indexDbInstance, objectStore, object?.id))).then(() => {
+                console.log("Deleted unused objects");
+              });
+              const newSaveObjects = savedObjects.filter(object => filteredData.find(entry => entry?.id === object?.id));
+              
+              // Why am I setting all saved objects to now allowed?
+              newSaveObjects.forEach(object => {
+                filteredData.find(entry => entry?.id === object?.id).allowed = false
+              })
+              setList(filteredData)
+              if (id === "killerAddOns") {
+                readRemoteFile(urls.killers, {
+                  header: true,
+                  complete: results => {
+                    let sortedResults = results.data.sort((a,b) => {
+                      if (a?.name < b?.name) {
+                        return -1;
+                    }
+                    if (a?.name > b?.name) {
+                        return 1;
+                    }
+                    return 0;
+                    })
+
+                    const groupedByKiller = sortedResults.map(killer => {
+                      return {
+                        killer: killer?.name,
+                        addOns: filteredData.filter(addOn =>
+                          addOn.killer_id === killer?.id
+                        )
+                      }
+                    })
+                    
+                    setGroupedByKiller(groupedByKiller)
+                    
+                  }
+                })
+              } else {
+                setList(filteredData)
+              }
+            })
+          }
         });
-      }, []);
+      }).catch(error => {
+        console.error("Failed to initialize indexDb", error)
+      });
+      localStorage.getItem(`${id}emptyAllowed`) === "true" ? setEmptyAllowed(true) : setEmptyAllowed(false)
+    }, []);
 
       // Function: removeOppositeRoleOfferings
       // Filters out offerings that belong to the opposite role based on the list ID.
@@ -133,20 +134,44 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
             <Form>
               <div>
                 <Form.Check
-                  onChange={(event) => setEmptyAllowed(event.target.checked)}
-                  type="switch"
-                  id="empty-toggle"
+                  id={`${id}-allow-empty`}
+                  onClick={(e) => e.stopPropagation()}
+                  type="checkbox"
                   label="Allow Empty Slot"
-                  checked={emptyAllowed}
-                />
+                  className="allow-empty-control"
+                >
+                  <Form.Check.Input
+                    type="checkbox"
+                    checked={emptyAllowed}
+                    onChange={(event) => {
+                      setEmptyAllowed(event.target.checked)
+                      console.log(`emptyAllowedValue: ${event.target.checked}`)
+                      localStorage.setItem(`${id}emptyAllowed`, event.target.checked);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <span className="allow-empty-text">Allow Empty Slot</span>
+                </Form.Check>
               </div>
           </Form>
           )
         }
       }
-    
+
+      const handleAccordionState = () => {
+        setDisplayState((prevState) => {
+          if (prevState === "0") {
+            localStorage.setItem(`${id}AccordionState`, null);
+            return null;
+          } else {
+            localStorage.setItem(`${id}AccordionState`, "0");
+            return "0"
+          }
+        });
+      };
+
       return (
-        <Accordion className="styled-accordion">
+        <Accordion className="styled-accordion" defaultActiveKey={displayState} onClick={() => handleAccordionState()}>
           <Accordion.Item eventKey="0">
             <Accordion.Header className="styled-accordion-header">{`Filter ${filter}`}</Accordion.Header>
             <Accordion.Body>

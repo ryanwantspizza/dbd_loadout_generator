@@ -26,7 +26,7 @@ function Selector({
   optionsState,
   addOnsState,
   emptyAllowed,
-  emptyAddOnAllowed,
+  emptyAddOnAllowed = states.defaultEmptyAllowedState,
   role,
 }) {
   const [message, setMessage] = useState("");
@@ -45,9 +45,10 @@ function Selector({
   const allowedOptions = options.filter((o) => o?.allowed);
   const allowedAddOns = addOnOptions.filter((a) => a?.allowed);
   const empty = useRecoilValue(emptyAllowed);
+  const emptyAddOn = useRecoilValue(emptyAddOnAllowed);
   const [indexDb, setIndexDb] = useState(null);
   let additionalOption = empty ? 1 : 0;
-  let additionalAddOnOption = emptyAddOnAllowed ? 1 : 0;
+  let additionalAddOnOption = emptyAddOn ? 1 : 0;
   let addOnStore =
     id === "killersCurrentSelection"
       ? "killerAddOnsCurrentSelection"
@@ -112,6 +113,7 @@ function Selector({
 
     for (let i = 0; i < numberOfPerksToChooseFrom; i++) {
       let randomNumber;
+      console.log(`additionalOption: ${additionalOption}`);
       do {
         randomNumber = Math.floor(
           Math.random() * (allowedOptions.length + additionalOption)
@@ -132,6 +134,7 @@ function Selector({
   // Function: handleSingleSelection
   // Selects a single random option for the current selection type.
   function handleSingleSelection() {
+    console.log(`additionalOption: ${additionalOption}`);
     let selection;
     let randomNumber = Math.floor(
       Math.random() * (allowedOptions.length + additionalOption)
@@ -177,8 +180,9 @@ function Selector({
     let selection;
     let chosenAddOns;
     if (allowedOptions.length > 0) {
+      console.log(`additionalAddOnOption: ${additionalAddOnOption}`);
       let randomNumber = Math.floor(
-        Math.random() * (allowedOptions.length + additionalOption)
+        Math.random() * (allowedOptions.length + additionalAddOnOption)
       );
       if (randomNumber !== allowedOptions.length) {
         selection = allowedOptions[randomNumber];
