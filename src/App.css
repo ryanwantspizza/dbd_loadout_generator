@@ -1117,3 +1117,18 @@ body.select-killers .form-switch .form-check-input:checked::after {
 .allow-empty-control .allow-empty-text {
   pointer-events: none;
 }
+
+/* "Keep screen awake" toggle — smaller than the role switch, centred under it */
+.keep-awake-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e0e0e0;
+  font-size: clamp(12px, 1.6vw, 16px);
+  margin: 0.25rem 0 0.5rem;
+  opacity: 0.85;
+}
+
+.keep-awake-selection .form-check-label {
+  cursor: pointer;
+}
