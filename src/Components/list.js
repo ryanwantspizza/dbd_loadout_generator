@@ -131,29 +131,23 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
       function renderEmptyToggle() {
         if (id !== "survivors" && id !== "killers") {
           return(
-            <Form>
-              <div>
-                <Form.Check
-                  id={`${id}-allow-empty`}
-                  onClick={(e) => e.stopPropagation()}
-                  type="checkbox"
-                  label="Allow Empty Slot"
-                  className="allow-empty-control"
-                >
-                  <Form.Check.Input
-                    type="checkbox"
-                    checked={emptyAllowed}
-                    onChange={(event) => {
-                      setEmptyAllowed(event.target.checked)
-                      console.log(`emptyAllowedValue: ${event.target.checked}`)
-                      localStorage.setItem(`${id}emptyAllowed`, event.target.checked);
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <span className="allow-empty-text">Allow Empty Slot</span>
-                </Form.Check>
-              </div>
-          </Form>
+            <Form.Check
+              id={`${id}-allow-empty`}
+              onClick={(e) => e.stopPropagation()}
+              type="checkbox"
+              className="allow-empty-control"
+            >
+              <Form.Check.Input
+                type="checkbox"
+                checked={emptyAllowed}
+                onChange={(event) => {
+                  setEmptyAllowed(event.target.checked)
+                  localStorage.setItem(`${id}emptyAllowed`, event.target.checked);
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <Form.Check.Label className="allow-empty-text">Allow Empty Slot</Form.Check.Label>
+            </Form.Check>
           )
         }
       }
@@ -175,32 +169,41 @@ function List({ id, listState, emptyAllowedState, listUrl, filter }) {
           <Accordion.Item eventKey="0">
             <Accordion.Header className="styled-accordion-header">{`Filter ${filter}`}</Accordion.Header>
             <Accordion.Body>
-              {renderEmptyToggle()}
-              <button onClick={() => handleClick(true)}>Select All</button>
-              <button onClick={() => handleClick(false)}>Unselect All</button>
+              <div className="list-controls">
+                {renderEmptyToggle()}
+                <div className="list-controls__actions">
+                  <button onClick={() => handleClick(true)}>Select All</button>
+                  <button onClick={() => handleClick(false)}>Unselect All</button>
+                </div>
+              </div>
               {id === "killerAddOns" ? (
                 groupedByKiller.map((killer) => {
                   return (
-                  <Accordion className="styled-accordion">
+                  <Accordion className="styled-accordion" key={killer.killer}>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>{killer.killer}</Accordion.Header>
                     <Accordion.Body>
-                      {killer.addOns.map(addOn => {
-                        return (
-                        <Checkbox key={addOn?.id} item={addOn} listState={listState} db={indexDb} id={id}/>
-                        )
-                      })}
+                      <div className="checkbox-list">
+                        {killer.addOns.map(addOn => {
+                          return (
+                          <Checkbox key={addOn?.id} item={addOn} listState={listState} db={indexDb} id={id}/>
+                          )
+                        })}
+                      </div>
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
                   )
                 })
               ) : (
-              list.map((item) => {
-                return (
-                <Checkbox key={item?.id} item={item} listState={listState} db={indexDb} id={id}/>
-                )
-              }))}
+              <div className="checkbox-list">
+                {list.map((item) => {
+                  return (
+                  <Checkbox key={item?.id} item={item} listState={listState} db={indexDb} id={id}/>
+                  )
+                })}
+              </div>
+              )}
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>

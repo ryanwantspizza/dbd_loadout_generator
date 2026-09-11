@@ -44,10 +44,10 @@ function Checkbox({ item, listState, db, id }) {
     }
 
     return (
-        <div>
+        <div className="checkbox-row">
             <label>
-                <input type="checkbox" id={item?.id} checked={allowed} onChange={handleClickEvent} style={{ marginRight: '8px' }}/>
-                {item?.name}
+                <input type="checkbox" id={item?.id} checked={allowed} onChange={handleClickEvent}/>
+                <span>{item?.name}</span>
             </label>
         </div>
     )

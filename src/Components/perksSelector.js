@@ -62,32 +62,25 @@ function PerksSelector({ optionsState, indexDb, tableId, role }) {
   }
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Perk</th>
-            <th>Refresh</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentSelectedPerks?.map((perk, index) => (
-            <tr key={index}>
-              <td>{perk?.name || "Unknown Perk"}</td> {/* Defensive check for undefined perk name */}
-              <td>
-                <button onClick={() => handleRefresh(index, perk?.id)}>
-                  Refresh
-                </button>
-              </td>
-            </tr>
-          )) || (
-            <tr>
-              <td colSpan="2">No perks selected.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+    <ul className="result-list">
+      {currentSelectedPerks?.length ? (
+        currentSelectedPerks.map((perk, index) => (
+          <li className="result-row" key={index}>
+            <span className="result-row__name">{perk?.name || "Unknown Perk"}</span>
+            <button
+              className="refresh-btn"
+              aria-label={`Reroll ${perk?.name || "perk"}`}
+              title="Reroll"
+              onClick={() => handleRefresh(index, perk?.id)}
+            >
+              ↻
+            </button>
+          </li>
+        ))
+      ) : (
+        <li className="result-empty">No perks selected.</li>
+      )}
+    </ul>
   );
 }
 

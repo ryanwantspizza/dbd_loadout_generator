@@ -67,27 +67,22 @@ function AddOnsSelector({ indexDb, tableId, role }) {
 
   return (
     <div>
-      <p>{currentlySelectedKillerOrItem.killerOrItem?.name}</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Add-On</th>
-            <th>Refresh</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentlySelectedKillerOrItem.addOns.map((addOn, index) => (
-            <tr key={index}>
-              <td>{addOn?.name}</td>
-              <td>
-                <button onClick={() => handleRefresh(index, addOn?.id)}>
-                  Refresh
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <p className="result-lead">{currentlySelectedKillerOrItem.killerOrItem?.name}</p>
+      <ul className="result-list">
+        {currentlySelectedKillerOrItem.addOns.map((addOn, index) => (
+          <li className="result-row" key={index}>
+            <span className="result-row__name">{addOn?.name}</span>
+            <button
+              className="refresh-btn"
+              aria-label={`Reroll ${addOn?.name || "add-on"}`}
+              title="Reroll"
+              onClick={() => handleRefresh(index, addOn?.id)}
+            >
+              ↻
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

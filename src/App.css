@@ -1,1134 +1,517 @@
-.App {
+/* ============================================================
+   DBD Loadout Generator — design system
+   Dark, atmospheric "Dead by Daylight" theme. Responsive by
+   default: layouts are CSS grids that reflow to fit the screen.
+   ============================================================ */
+
+:root {
+  /* surfaces */
+  --bg: #0d0d0f;
+  --surface: #17171c;
+  --surface-2: #1e1e25;
+  --surface-3: #262630;
+  --border: #2c2c34;
+  --border-strong: #3b3b46;
+
+  /* text */
+  --text: #e7e7ea;
+  --text-muted: #9a9aa4;
+  --text-dim: #6f6f78;
+
+  /* accent (blood red) */
+  --accent: #c62828;
+  --accent-hover: #e53935;
+  --accent-strong: #8e1c1c;
+  --accent-glow: rgba(198, 40, 40, 0.35);
+
+  /* shape */
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+
+  --display-font: 'Oswald', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+  --maxw: 1200px;
+}
+
+body {
+  background:
+    radial-gradient(1200px 620px at 50% -12%, rgba(142, 28, 28, 0.18), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, rgba(48, 48, 68, 0.16), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* ---------- Layout shell ---------- */
+.app-shell {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 4vw, 2.5rem) 4rem;
+}
+
+/* ---------- Header ---------- */
+.app-header {
   text-align: center;
+  margin-bottom: 1.75rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-header__eyebrow {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.45em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-hover);
+  margin: 0 0 0.4rem;
+  padding-left: 0.45em; /* optically re-center against letter-spacing */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.app-header__title {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  line-height: 1;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 2px 26px var(--accent-glow);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app-header__subtitle {
+  margin: 0.8rem auto 0;
+  max-width: 46ch;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ---------- Controls (role switch + keep awake) ---------- */
+.controls {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-#killer-survivor-selection {
-  font-size: 20px
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* General styling to match the Dead by Daylight theme */
-body {
-  background-color: #1a1a1a; /* Dark background */
-  color: #e0e0e0; /* Light text */
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-/* Styling for buttons */
-button {
-  background-color: #b71c1c; /* Blood red */
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #d32f2f; /* Lighter red on hover */
-}
-
-/* Styling for tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
-
-table th, table td {
-  border: 1px solid #444;
-  padding: 10px;
-  text-align: left;
-}
-
-table th {
-  background-color: #333;
-  color: #fff;
-}
-
-/* Ensure table text is readable */
-table th, table td {
-  color: #e0e0e0; /* Light text color for readability */
-}
-
-/* Ensure message text is visible */
-.message {
-  color: #e0e0e0; /* Match table row text color */
-  font-size: 18px;
-  text-align: center;
-  margin-top: 10px;
-}
-
-.selector-container {
-  color: #e0e0e0;
-}
-
-.killer-survivor-selection {
-  /* responsive font-size: grows with viewport but clamps between 18px and 50px */
-  font-size: clamp(18px, 3.5vw, 50px);
-  color: #e0e0e0;
-
-  /* keep layout flexible so the control wraps nicely on small screens */
-  display: flex;
-  align-items: center;
-  gap: 0; /* remove gap so spacing is controlled by the switch margins */
-  flex-wrap: wrap;
-}
-
-/* give the switch equal space on both sides so distance to Killers and Survivors matches */
-.killer-survivor-selection .form-switch {
-  /* scale spacing with the selector font-size so left/right are equal at all sizes */
-  margin: 0 0.45em; /* tweak the 0.45em value to taste */
-}
-
-/* optional: tweak spacing on very small screens */
-@media (max-width: 420px) {
-  .killer-survivor-selection {
-    font-size: clamp(14px, 5.5vw, 22px);
-    gap: 0.35rem;
-  }
-
-  .killer-survivor-selection .form-switch {
-    margin: 0 0.25em; /* smaller on tiny screens */
-  }
-}
-
-/* Responsive styling for List and Selector components */
-@media (max-width: 768px) {
-  .list-container, .selector-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px 0;
-  }
-
-  .list-container table, .selector-container table {
-    width: 100%;
-  }
-}
-
-/* Accordion styling to match table cells */
-.styled-accordion .accordion-item {
-  border: 1px solid #444;
-  border-radius: 4px;
+  gap: 0.85rem;
   margin-bottom: 0.5rem;
-  overflow: hidden;
+}
+
+.role-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+
+.role-switch__option {
+  appearance: none;
+  border: 0;
   background: transparent;
-}
-
-.styled-accordion .accordion-button {
-  background: transparent;
-  color: var(--selected-text-color);
-  padding: 10px;
-  border: none;
-  box-shadow: none;
-}
-
-.styled-accordion .accordion-button:not(.collapsed) {
-  /* keep consistent when expanded */
-  background: rgba(255,255,255,0.02);
-}
-
-.styled-accordion .accordion-body {
-  color: var(--selected-text-color);
-  padding: 10px;
-  border-top: 1px solid #444;
-}
-
-/* If you render items inside the accordion that use table layout, keep the same table rules */
-.styled-accordion table th,
-.styled-accordion table td {
-  color: var(--selected-text-color);
-}
-
-/* ensure variable exists */
-:root {
-  --selected-text-color: #e0e0e0;
-  /* fallback values if you don't already have these variables */
-  --button-bg: #222;
-  --button-color: #e0e0e0;
-  --button-border: #444;
-  --button-bg-hover: rgba(255,255,255,0.03);
-  --button-color-hover: #ffffff;
-}
-
-/* make styled-accordion override Bootstrap */
-.styled-accordion,
-.styled-accordion .accordion-item,
-.styled-accordion .accordion-header,
-.styled-accordion .accordion-button,
-.styled-accordion .accordion-body {
-  color: var(--selected-text-color) !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* specifically override the button rules Bootstrap applies */
-.styled-accordion .accordion-button {
-  color: var(--button-color) !important;
-  background: var(--button-bg) !important;
-  border: 1px solid var(--button-border) !important;
-  padding: 0.5rem 0.75rem !important;
-  box-shadow: none !important;
-  transition: background-color 150ms ease, color 150ms ease !important;
-  border-radius: 0 !important; /* keep consistent with table edges */
-}
-
-/* hover / focus / expanded states */
-.styled-accordion .accordion-button:hover,
-.styled-accordion .accordion-button:focus,
-.styled-accordion .accordion-button:not(.collapsed) {
-  background: var(--button-bg-hover) !important;
-  color: var(--button-color-hover) !important;
-}
-
-/* Stronger override: ensure header and all children use the same hover/focus/expanded colors */
-.styled-accordion .accordion-button:hover,
-.styled-accordion .accordion-button:focus,
-.styled-accordion .accordion-button:not(.collapsed),
-.styled-accordion .accordion-button:hover *,
-.styled-accordion .accordion-button:focus *,
-.styled-accordion .accordion-button:not(.collapsed) * {
-  background: var(--button-bg-hover) !important;
-  color: var(--button-color-hover) !important;
-}
-
-/* make sure text inside header (title, icons) inherits */
-.styled-accordion .accordion-button *,
-.styled-accordion .accordion-button:after {
-  color: inherit !important;
-}
-
-/* keep body text matching table/button color */
-.styled-accordion .accordion-body,
-.styled-accordion table th,
-.styled-accordion table td {
-  color: var(--button-color) !important;
-}
-
-/* ensure links/buttons inside also inherit the color */
-.styled-accordion a,
-.styled-accordion button,
-.styled-accordion label {
-  color: var(--selected-text-color) !important;
-}
-
-/* Remove rounded corners for accordions to match table edges */
-.styled-accordion .accordion-item {
-  border-radius: 0 !important;
-  overflow: visible; /* allow children to show without clipping */
-}
-
-.styled-accordion .accordion-button {
-  border-radius: 0 !important;
-}
-
-.styled-accordion .accordion-body {
-  border-radius: 0 !important;
-}
-
-/* Strong override to ensure accordion header text inherits the button color */
-.styled-accordion .accordion-button,
-.styled-accordion .accordion-button *,
-.styled-accordion .accordion-button .accordion-header,
-.styled-accordion .accordion-button .btn,
-.styled-accordion .accordion-button a,
-.styled-accordion .accordion-button svg {
-  color: var(--button-color) !important;
-  background: var(--button-bg) !important;
-}
-
-/* Ensure variables are correct */
-:root {
-  --button-color: #e0e0e0;        /* normal header text */
-  --button-color-hover: #ffffff;  /* hover/focus header text */
-  --button-bg-hover: rgba(255,255,255,0.03);
-}
-
-/* Force header and all descendants to use the header color and inherit on hover/focus */
-.styled-accordion .accordion-button,
-.styled-accordion .accordion-button * {
-  color: var(--button-color) !important;
-  background: transparent !important;
-}
-
-.styled-accordion .accordion-button:hover,
-.styled-accordion .accordion-button:focus,
-.styled-accordion .accordion-button:not(.collapsed) {
-  background: var(--button-bg-hover) !important;
-  color: var(--button-color-hover) !important;
-}
-
-/* make children inherit the computed header color so they can't stay black */
-.styled-accordion .accordion-button:hover *,
-.styled-accordion .accordion-button:focus *,
-.styled-accordion .accordion-button:not(.collapsed) * {
-  color: inherit !important;
-  background: transparent !important;
-}
-
-/* Strong header-specific overrides to match button styles and hover behavior */
-.styled-accordion .styled-accordion-header,
-.styled-accordion .styled-accordion-header .accordion-button {
-  color: var(--button-color) !important;
-  background: var(--button-bg) !important;
-  border: 1px solid var(--button-border) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  transition: background-color 150ms ease, color 150ms ease !important;
-}
-
-/* Ensure all child nodes inherit header color (icons, spans, SVGs, etc.) */
-.styled-accordion .styled-accordion-header *,
-.styled-accordion .styled-accordion-header .accordion-button * {
-  color: inherit !important;
-  background: transparent !important;
-}
-
-/* Hover / focus / expanded state (and ensure children inherit the hover color) */
-.styled-accordion .styled-accordion-header .accordion-button:hover,
-.styled-accordion .styled-accordion-header .accordion-button:focus,
-.styled-accordion .styled-accordion-header .accordion-button:not(.collapsed),
-.styled-accordion .styled-accordion-header .accordion-button:hover *,
-.styled-accordion .styled-accordion-header .accordion-button:focus *,
-.styled-accordion .styled-accordion-header .accordion-button:not(.collapsed) * {
-  background: var(--button-bg-hover) !important;
-  color: var(--button-color-hover) !important;
-}
-
-/* If nested accordions exist, keep their headers consistent too */
-.styled-accordion .accordion-item .styled-accordion-header,
-.styled-accordion .accordion-item .styled-accordion-header .accordion-button {
-  border-radius: 0 !important;
-  color: var(--button-color) !important;
-}
-
-/* Ensure red button colors for accordion headers and force descendants to inherit */
-:root {
-  --button-bg: #b71c1c;        /* desired red */
-  --button-bg-hover: #d32f2f;  /* hover red */
-  --button-color: #ffffff;     /* normal text on button */
-  --button-color-hover: #ffffff;
-}
-
-/* Target header class and .accordion-button explicitly, last rules win */
-.styled-accordion .styled-accordion-header .accordion-button,
-.styled-accordion .accordion-button {
-  background: var(--button-bg) !important;
-  color: var(--button-color) !important;
-  border: 1px solid var(--button-border) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Hover / focus / expanded states */
-.styled-accordion .styled-accordion-header .accordion-button:hover,
-.styled-accordion .styled-accordion-header .accordion-button:focus,
-.styled-accordion .styled-accordion-header .accordion-button:not(.collapsed),
-.styled-accordion .accordion-button:hover,
-.styled-accordion .accordion-button:focus,
-.styled-accordion .accordion-button:not(.collapsed) {
-  background: var(--button-bg-hover) !important;
-  color: var(--button-color-hover) !important;
-}
-
-/* Force all child nodes (icons, spans, SVGs) to inherit the computed color */
-.styled-accordion .styled-accordion-header .accordion-button *,
-.styled-accordion .styled-accordion-header .accordion-button svg,
-.styled-accordion .styled-accordion-header .accordion-button .bi,
-.styled-accordion .accordion-button * {
-  color: inherit !important;
-  background: transparent !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
-}
-
-/* Make the accordion chevron match the header text color */
-.styled-accordion .accordion-button::after,
-.styled-accordion .styled-accordion-header .accordion-button::after {
-  color: inherit !important;
-  fill: currentColor !important;
-  transition: transform 0.2s ease, color 150ms ease !important;
-}
-
-/* preserve rotation when expanded */
-.styled-accordion .accordion-button:not(.collapsed)::after {
-  transform: rotate(180deg) !important;
-}
-
-/* ======= Fixed switch knob/track overrides (replace previous final block) ======= */
-:root {
-  --btn-red: #b71c1c;
-  --table-header-dark: #333;
-}
-
-/* Base sizing to match Bootstrap switch and remove possible background-image */
-.form-switch .form-check-input {
-  width: 2.6rem;
-  height: 1.4rem;
-  padding: 0;
-  border-radius: 1rem;
-  position: relative;
-  background-image: none !important;
-  background-repeat: none !important;
-  box-shadow: none !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-
-/* ===== switch sizing / centering improvements ===== */
-:root {
-  --switch-width: 2.6rem;
-  --switch-height: 1.4rem;
-  --switch-pad: 2px; /* inner padding between knob and track edge */
-  --knob-size: calc(var(--switch-height) - (var(--switch-pad) * 2));
-}
-
-/* track base (keep previous color rules in place) */
-.form-switch .form-check-input {
-  width: var(--switch-width) !important;
-  height: var(--switch-height) !important;
-  padding: 0 !important;
-  border-radius: calc(var(--switch-height) / 2) !important;
-  position: relative !important;
-  box-sizing: border-box !important;
-}
-
-/* knob: center vertically using translateY(-50%), size driven by --knob-size */
-.form-switch .form-check-input::after {
-  content: "" ;
-  position: absolute;
-  top: 50% !important;
-  left: var(--switch-pad) !important;
-  width: var(--knob-size) !important;
-  height: var(--knob-size) !important;
-  border-radius: 50% !important;
-  transform: translateY(-50%) !important;
-  transition: transform .18s ease, background-color .18s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  z-index: 2;
-  background-image: none !important;
-}
-
-/* checked: move knob horizontally while keeping vertical centering */
-.form-switch .form-check-input:checked::after {
-  transform: translate(calc(var(--switch-width) - var(--knob-size) - (var(--switch-pad) * 2)), -50%) !important;
-}
-
-/* ensure track stays behind knob */
-.form-switch .form-check-input {
-  z-index: 1;
-  overflow: visible;
-}
-
-/* ----- SURVIVOR MODE: track = dark, knob = red ----- */
-body.select-survivors .form-switch .form-check-input {
-  background-color: var(--table-header-dark) !important;
-  border: 1px solid var(--table-header-dark) !important;
-}
-body.select-survivors .form-switch .form-check-input::after {
-  background-color: var(--btn-red) !important;
-}
-
-/* Explicitly keep the same colors when checked */
-body.select-survivors .form-switch .form-check-input:checked {
-  background-color: var(--table-header-dark) !important;
-  border-color: var(--table-header-dark) !important;
-}
-body.select-survivors .form-switch .form-check-input:checked::after {
-  background-color: var(--btn-red) !important;
-}
-
-/* ----- KILLER MODE: track = red, knob = dark ----- */
-body.select-killers .form-switch .form-check-input {
-  background-color: var(--btn-red) !important;
-  border: 1px solid var(--btn-red) !important;
-}
-body.select-killers .form-switch .form-check-input::after {
-  background-color: var(--table-header-dark) !important;
-}
-
-/* Explicitly keep the same colors when checked */
-body.select-killers .form-switch .form-check-input:checked {
-  background-color: var(--btn-red) !important;
-  border-color: var(--btn-red) !important;
-}
-body.select-killers .form-switch .form-check-input:checked::after {
-  background-color: var(--table-header-dark) !important;
-}
-
-/* Small accessibility focus ring */
-.form-switch .form-check-input:focus {
-  box-shadow: 0 0 0 3px rgba(183,28,28,0.12) !important;
-}
-
-/* Make the switch size follow the .killer-survivor-selection font-size */
-.killer-survivor-selection {
-  /* define switch sizing in em so it scales with this container's font-size */
-  --switch-height: 1em;                  /* track height = 1 x text height */
-  --switch-pad: 0.12em;                  /* inner padding */
-  --knob-size: calc(var(--switch-height) - (var(--switch-pad) * 2));
-  --switch-width: calc(var(--switch-height) * 1.8); /* track width proportional to height */
-}
-
-/* scope all switch rules to the selector so other switches remain untouched */
-.killer-survivor-selection .form-switch .form-check-input {
-  width: var(--switch-width) !important;
-  height: var(--switch-height) !important;
-  border-radius: calc(var(--switch-height) / 2) !important;
-  padding: 0 !important;
-  position: relative !important;
-  box-sizing: border-box !important;
-  vertical-align: middle;
-}
-
-/* knob */
-.killer-survivor-selection .form-switch .form-check-input::after {
-  content: "" ;
-  position: absolute;
-  top: 50% !important;
-  left: var(--switch-pad) !important;
-  width: var(--knob-size) !important;
-  height: var(--knob-size) !important;
-  border-radius: 50% !important;
-  transform: translateY(-50%) !important;
-  transition: transform .18s ease, background-color .18s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  z-index: 2;
-  background-image: none !important;
-}
-
-/* checked: move knob horizontally while keeping vertical centering */
-.killer-survivor-selection .form-switch .form-check-input:checked::after {
-  transform: translate(calc(var(--switch-width) - var(--knob-size) - (var(--switch-pad) * 2)), -50%) !important;
-}
-
-/* ensure the track sits behind the knob */
-.killer-survivor-selection .form-switch .form-check-input {
-  z-index: 1;
-  overflow: visible;
-}
-
-/* accordion sizing variables — tweak to taste */
-:root {
-  --acc-col-width: 320px;
-  --acc-col-max: 420px;
-  --acc-gap: 0.6rem;
-  --acc-font-size: 16px;
-  --acc-padding: 0.75rem;
-}
-
-/* layout: grid-like rows on wide screens, wrap to new lines as needed */
-.styled-accordion {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--acc-gap);
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* each accordion item becomes a consistent "card" */
-.styled-accordion .accordion-item {
-  flex: 1 1 var(--acc-col-width);
-  max-width: var(--acc-col-max);
-  min-width: 200px;
-  box-sizing: border-box;
-  border-radius: 0;
-  overflow: visible;
-}
-
-/* make header size consistent */
-.styled-accordion .accordion-button {
-  font-size: var(--acc-font-size);
-  padding: var(--acc-padding);
-  min-height: 3.2rem; /* keeps button height uniform */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-/* body content sizing */
-.styled-accordion .accordion-body {
-  padding: var(--acc-padding);
-  font-size: calc(var(--acc-font-size) - 1px);
-  min-height: 4rem;
-  box-sizing: border-box;
-}
-
-/* ensure tables inside accordions fill the card */
-.styled-accordion .accordion-body table {
-  width: 100%;
-  table-layout: auto;
-}
-
-/* SMALL SCREENS: stack accordion items full-width */
-@media (max-width: 720px) {
-  .styled-accordion {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .styled-accordion .accordion-item {
-    flex-basis: 100%;
-    max-width: 100%;
-    width: 100%;
-  }
-}
-
-/* Apply the same fixed-card, responsive stacking behavior to other selector containers
-   (selector-container, survivor/perk/addons selectors). Adjust class names if your markup
-   uses different container names. */
-.selector-container,
-.survivor-selection,
-.perk-selection,
-.perks-selector,
-.addons-selection {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--acc-gap);
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Make any accordion items inside those containers behave like cards */
-.selector-container .accordion-item,
-.survivor-selection .accordion-item,
-.perk-selection .accordion-item,
-.perks-selector .accordion-item,
-.addons-selection .accordion-item {
-  flex: 1 1 var(--acc-col-width);
-  max-width: var(--acc-col-max);
-  min-width: 200px;
-  box-sizing: border-box;
-  border-radius: 0;
-  overflow: visible;
-}
-
-/* Consistent header sizing */
-.selector-container .accordion-button,
-.survivor-selection .accordion-button,
-.perk-selection .accordion-button,
-.perks-selector .accordion-button,
-.addons-selection .accordion-button {
-  font-size: var(--acc-font-size);
-  padding: var(--acc-padding);
-  min-height: 3.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-/* Body/content sizing */
-.selector-container .accordion-body,
-.survivor-selection .accordion-body,
-.perk-selection .accordion-body,
-.perks-selector .accordion-body,
-.addons-selection .accordion-body {
-  padding: var(--acc-padding);
-  font-size: calc(var(--acc-font-size) - 1px);
-  min-height: 4rem;
-  box-sizing: border-box;
-}
-
-/* Ensure tables inside these containers fill the card */
-.selector-container .accordion-body table,
-.survivor-selection .accordion-body table,
-.perk-selection .accordion-body table,
-.perks-selector .accordion-body table,
-.addons-selection .accordion-body table {
-  width: 100%;
-  table-layout: auto;
-}
-
-/* SMALL SCREENS: stack full-width */
-@media (max-width: 720px) {
-  .selector-container,
-  .survivor-selection,
-  .perk-selection,
-  .perks-selector,
-  .addons-selection {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .selector-container .accordion-item,
-  .survivor-selection .accordion-item,
-  .perk-selection .accordion-item,
-  .perks-selector .accordion-item,
-  .addons-selection .accordion-item {
-    flex-basis: 100%;
-    max-width: 100%;
-    width: 100%;
-  }
-}
-
-/* Ensure selector containers and accordions do not stretch and align left/top */
-.selector-container,
-.styled-accordion,
-.survivor-selection,
-.perk-selection,
-.perks-selector,
-.addons-selection {
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
-  text-align: left;
-}
-
-/* Prevent individual accordion cards from stretching vertically */
-.selector-container .accordion-item,
-.styled-accordion .accordion-item,
-.survivor-selection .accordion-item,
-.perk-selection .accordion-item,
-.perks-selector .accordion-item,
-.addons-selection .accordion-item {
-  align-self: flex-start !important;
-}
-
-/* Remove visible border from accordion headers only */
-.styled-accordion .accordion-button {
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* If there is a divider between header and body, remove that too */
-.styled-accordion .accordion-body {
-  border-top: none !important;
-}
-
-/* Keep item outline/border if you still want card edges; remove if you want totally borderless cards */
-.styled-accordion > .accordion-item {
-  /* leave this commented if you want to keep the item border */
-  /* border: 1px solid var(--acc-border); */
-  border-radius: 0;
-}
-
-/* Remove any visible border/outline/box-shadow from styled accordions */
-.styled-accordion,
-.styled-accordion .accordion,
-.styled-accordion .accordion-item,
-.styled-accordion .accordion-header,
-.styled-accordion .accordion-button,
-.styled-accordion .accordion-body {
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  outline: none !important;
-}
-
-/* Remove any pseudo-element borders Bootstrap may inject */
-.styled-accordion .accordion-item::before,
-.styled-accordion .accordion-button::before,
-.styled-accordion .accordion-header::before {
-  content: none !important;
-  display: none !important;
-}
-
-/* Remove the divider line between header and body */
-.styled-accordion .accordion-body {
-  border-top: none !important;
-}
-
-/* If an ancestor adds an outline or thick border, make sure items don't stretch it */
-.styled-accordion > .accordion-item {
-  border: none !important;
-  align-self: flex-start !important;
-}
-
-/* keep accordion item borderless and header clean */
-.styled-accordion .accordion-item {
-  border: none !important;
-  background: transparent !important;
-}
-
-.styled-accordion .accordion-button {
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  position: relative;
-  z-index: 2; /* ensure header rides above the body border */
-}
-
-/* add a single, consistent border around the accordion body only */
-.styled-accordion .accordion-body {
-  border: 1px solid var(--acc-border, #444) !important;
-  border-top: none !important;                /* avoid double-line at header/body seam */
-  border-radius: 0 0 6px 6px !important;      /* rounded bottom corners; adjust as desired */
-  background: var(--acc-body-bg, transparent) !important;
-  z-index: 1;
-  margin-top: -1px; /* pull body up slightly so the border touches the header cleanly */
-  box-shadow: none !important;
-}
-
-/* Ensure vertical padding for list-like items inside accordion bodies */
-/* UL / OL items */
-.styled-accordion .accordion-body ul,
-.styled-accordion .accordion-body ol {
-  margin: 0;
-  padding-left: 1rem;
-  list-style-position: outside;
-}
-
-.styled-accordion .accordion-body > ul > li,
-.styled-accordion .accordion-body > ol > li,
-.styled-accordion .accordion-body ul li,
-.styled-accordion .accordion-body ol li,
-.styled-accordion .accordion-body .list-group .list-group-item {
-  padding: 0.5rem 0 !important; /* vertical spacing */
-  line-height: 1.3 !important;
-}
-
-/* space BETWEEN list items inside accordion bodies (only between items) */
-.styled-accordion .accordion-body ul > li + li,
-.styled-accordion .accordion-body ol > li + li,
-.styled-accordion .accordion-body .list-group .list-group-item + .list-group-item {
-  margin-top: 0.5rem !important; /* adjust to taste */
-}
-
-/* Ensure spacing BETWEEN each list item inside accordion bodies — robust approach */
-
-/* Preferred: use gap so spacing works regardless of item markup */
-.styled-accordion .accordion-body > ul,
-.styled-accordion .accordion-body > ol,
-.styled-accordion .accordion-body .list-group {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0.5rem !important; /* space between items */
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding-left: 1rem !important; /* keep bullets aligned if using native lists */
-  list-style-position: outside !important;
-}
-
-/* Fallback: if you must support non-flex or want explicit margin between LIs */
-.styled-accordion .accordion-body > ul > li + li,
-.styled-accordion .accordion-body > ol > li + li,
-.styled-accordion .accordion-body .list-group .list-group-item + .list-group-item {
-  margin-top: 0.5rem !important; /* ensure inter-item spacing */
-}
-
-/* Ensure list items are block so margins/gap apply predictably */
-.styled-accordion .accordion-body li,
-.styled-accordion .accordion-body .list-group .list-group-item {
-  display: block !important;
-  padding: 0 !important; /* keep padding controlled by list container or anchors */
-}
-
-/* If items contain anchors/buttons, let them fill the item area */
-.styled-accordion .accordion-body li > a,
-.styled-accordion .accordion-body li > button,
-.styled-accordion .accordion-body .list-group .list-group-item > a {
-  display: block !important;
-  width: 100% !important;
-  padding: 0.25rem 0 !important; /* optional inner padding */
-}
-
-/* add vertical space between any adjacent direct children inside accordion bodies */
-.styled-accordion .accordion-body > * + * {
-  margin-top: 0.5rem !important; /* adjust to taste */
-}
-
-/* ensure common list-like containers inside accordions also get gap if they use flex */
-.styled-accordion .accordion-body .list-group,
-.styled-accordion .accordion-body ul,
-.styled-accordion .accordion-body ol {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0.5rem !important;
-  margin: 0 !important;
-  padding-left: 1rem !important;
-}
-
-/* Divider between list-like children inside accordion bodies */
-:root {
-  --list-divider-color: rgba(255,255,255,0.06);
-  --list-divider-thickness: 1px;
-}
-
-.styled-accordion .accordion-body > * + * {
-  border-top: var(--list-divider-thickness) solid var(--list-divider-color) !important;
-  padding-top: 0.5rem !important;   /* space after the divider */
-  margin-top: 0.25rem !important;    /* small separation so divider isn't jammed */
-}
-
-/* Ensure list-group and native lists also get a visible divider between items */
-.styled-accordion .accordion-body .list-group .list-group-item + .list-group-item,
-.styled-accordion .accordion-body ul > li + li,
-.styled-accordion .accordion-body ol > li + li {
-  border-top: var(--list-divider-thickness) solid var(--list-divider-color) !important;
-  padding-top: 0.5rem !important;
-  margin-top: 0 !important; /* padding handles the vertical spacing here */
-}
-
-/* If list items contain anchors/buttons, keep the clickable area full height */
-.styled-accordion .accordion-body li > a,
-.styled-accordion .accordion-body li > button,
-.styled-accordion .accordion-body .list-group .list-group-item > a {
-  display: block !important;
-  width: 100% !important;
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
-}
-
-/* keep native input accessible but visually hidden and click/focusable */
-.allow-empty-control input.allow-empty-checkbox {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: var(--box-size);
-  height: var(--box-size);
-  transform: translateY(-50%);
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  z-index: 4;
+  color: var(--text-muted);
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.55rem clamp(1.1rem, 5vw, 1.9rem);
+  border-radius: 999px;
   cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* label holds visual box and text */
-.allow-empty-control label {
-  position: relative !important;
-  overflow: visible !important;
-  padding-left: calc(var(--box-size) + 0.5rem); /* reserve space for the box */
-  line-height: 1;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
+.role-switch__option:hover {
+  color: var(--text);
 }
 
-/* visual box positioned exactly at left of label */
-.allow-empty-control label::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: var(--box-size);
-  height: var(--box-size);
-  transform: translateY(-50%);
-  border-radius: 0.18em;
-  background: var(--btn-red, #b71c1c);
-  border: 1px solid rgba(0,0,0,0.12);
-  box-shadow: inset 0 -0.08em rgba(0,0,0,0.08);
-  z-index: 1;
+.role-switch__option.is-active {
+  color: #fff;
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  box-shadow: 0 4px 16px var(--accent-glow);
 }
 
-/* white check centered inside the box using exact math */
-.allow-empty-control label::after {
-  content: "" !important;
-  position: absolute !important;
-  display: block !important;
-  width: var(--check-size, 0.62rem) !important;
-  height: var(--check-size, 0.62rem) !important;
-  left: calc((var(--box-size, 1rem) - var(--check-size, 0.62rem)) / 2) !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: contain !important;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23ffffff' d='M6.173 11.414L2.172 7.414 0.758 8.828 6.172 14.242 15.242 5.172 13.828 3.758z'/></svg>") !important;
-  pointer-events: none !important;
-  z-index: 3 !important;
-  opacity: 0 !important;
+.role-switch__option:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
 }
 
-/* show the check when checked; use multiple selectors for robustness */
-.allow-empty-control input.allow-empty-checkbox:checked + label::after,
-.allow-empty-control input.allow-empty-checkbox:checked ~ label::after,
-.allow-empty-control input.allow-empty-checkbox:checked + label::after {
-  opacity: 1 !important;
-}
-
-/* debug helper (uncomment to always show check for troubleshooting) */
-/* .allow-empty-control label::after { opacity: 1 !important; } */
-
-/* Fix allow-empty checkbox visuals: ensure red box is visible and label text doesn't overlap */
-.allow-empty-control {
-  --box-size: 1rem;
-  --check-size: 0.62rem;
+.keep-awake.form-check {
   display: inline-flex;
   align-items: center;
-  position: relative;
   gap: 0.5rem;
+  min-height: auto;
+  margin: 0;
+  padding: 0;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.keep-awake .form-check-input {
+  margin: 0;
+  float: none;
+  cursor: pointer;
+  background-color: var(--surface-3);
+  border-color: var(--border-strong);
+}
+
+.keep-awake .form-check-input:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.keep-awake .form-check-input:focus {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 0.2rem var(--accent-glow);
+}
+
+.keep-awake .form-check-label {
+  cursor: pointer;
+}
+
+/* ---------- Sections & responsive card grids ---------- */
+.section {
+  margin-top: 2.5rem;
+}
+
+.section__title {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.section__title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.card-grid--filter {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* ---------- Generator card ---------- */
+.generator-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* The "Get X" control is styled as a distinctly raised, pressable button so it
+   reads clearly as something to click, not a card header. */
+.generator-card__action {
+  appearance: none;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1rem;
+  color: #fff;
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  font-size: 1.05rem;
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  border: 1px solid var(--accent-strong);
+  border-radius: var(--radius-sm);
+  /* solid darker-red base + ambient shadow = a raised, tactile key */
+  box-shadow: 0 3px 0 var(--accent-strong), 0 5px 12px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+.generator-card__action:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--accent-strong), 0 8px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* press the key down into its base */
+.generator-card__action:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--accent-strong), 0 2px 6px rgba(0, 0, 0, 0.4);
+  filter: brightness(0.98);
+}
+
+.generator-card__action:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+.generator-card__icon {
+  flex: 0 0 auto;
+}
+
+.generator-card__result {
+  flex: 1;
+}
+
+/* ---------- Generated result content ---------- */
+.result-headline {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.result-empty {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.result-lead {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.7rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.45rem 0.5rem 0.45rem 0.7rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.result-row__name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.refresh-btn {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-3);
+  color: var(--text-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease,
+    transform 0.3s ease;
+}
+
+.refresh-btn:hover {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: rotate(90deg);
+}
+
+.refresh-btn:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+/* ---------- Filter accordions (themes Bootstrap via its own vars) ---------- */
+.styled-accordion {
+  --bs-accordion-color: var(--text);
+  --bs-accordion-bg: transparent;
+  --bs-accordion-border-color: var(--border);
+  --bs-accordion-border-width: 1px;
+  --bs-accordion-border-radius: var(--radius);
+  --bs-accordion-inner-border-radius: calc(var(--radius) - 1px);
+  --bs-accordion-btn-padding-x: 1rem;
+  --bs-accordion-btn-padding-y: 0.85rem;
+  --bs-accordion-btn-color: var(--text);
+  --bs-accordion-btn-bg: var(--surface);
+  --bs-accordion-btn-focus-border-color: var(--accent-strong);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 3px var(--accent-glow);
+  --bs-accordion-active-color: #fff;
+  --bs-accordion-active-bg: var(--accent);
+  --bs-accordion-body-padding-x: 1rem;
+  --bs-accordion-body-padding-y: 1rem;
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23e7e7ea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3e%3cpath d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3e%3cpath d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+}
+
+.styled-accordion .accordion-button {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* nested per-killer add-on accordions sit lighter, inside a body */
+.styled-accordion .accordion-body .styled-accordion {
+  --bs-accordion-btn-bg: var(--surface-2);
+  box-shadow: none;
+  margin-top: 0.6rem;
+}
+
+.styled-accordion .accordion-body .styled-accordion:first-child {
+  margin-top: 0;
+}
+
+/* ---------- List controls (select all / allow empty) ---------- */
+.list-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-controls__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.list-controls__actions button {
+  flex: 1 1 0;
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.42rem 0.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.list-controls__actions button:hover {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.list-controls .allow-empty-control.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: auto;
+  margin: 0;
+  padding: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.list-controls .allow-empty-control .form-check-input {
+  flex: 0 0 auto;
+  margin: 0;
+  float: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  background-color: var(--surface-3);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+}
+
+.list-controls .allow-empty-control .form-check-input:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.list-controls .allow-empty-control .form-check-input:focus {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 0.2rem var(--accent-glow);
+}
+
+.list-controls .allow-empty-control .allow-empty-text {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* ---------- Filter checkbox rows ---------- */
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.checkbox-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.checkbox-list::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+.checkbox-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.38rem 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.92rem;
+  color: var(--text);
+  transition: background 0.12s ease;
+}
+
+.checkbox-row label:hover {
+  background: var(--surface-2);
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex: 0 0 auto;
   margin: 0;
 }
 
-/* keep native input accessible but only covering the visual box area */
-.allow-empty-control input.allow-empty-checkbox {
-  position: absolute !important;
-  left: 0 !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: var(--box-size) !important;
-  height: var(--box-size) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  opacity: 0 !important;
-  z-index: 4 !important;
-  cursor: pointer;
-  pointer-events: auto !important;
-}
-
-/* reserve space so label text doesn't overlap the box */
-.allow-empty-control label {
-  position: relative !important;
-  display: inline-block !important;
-  padding-left: calc(var(--box-size) + 0.5rem) !important;
-  line-height: 1 !important;
-  cursor: pointer !important;
-  vertical-align: middle !important;
-  overflow: visible !important;
-}
-
-/* visual red box (ensure visible and stacked under the check) */
-.allow-empty-control label::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: var(--box-size) !important;
-  height: var(--box-size) !important;
-  border-radius: 0.18em !important;
-  background: var(--btn-red, #b71c1c) !important;
-  border: 1px solid rgba(0,0,0,0.12) !important;
-  box-shadow: inset 0 -0.08em rgba(0,0,0,0.08) !important;
-  z-index: 1 !important;
-  display: block !important;
-  opacity: 1 !important;
-}
-
-/* white check centered inside the box */
-.allow-empty-control label::after {
-  content: "" !important;
-  position: absolute !important;
-  left: calc((var(--box-size) - var(--check-size)) / 2) !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: var(--check-size) !important;
-  height: var(--check-size) !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: contain !important;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23ffffff' d='M6.173 11.414L2.172 7.414 0.758 8.828 6.172 14.242 15.242 5.172 13.828 3.758z'/></svg>") !important;
-  opacity: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-}
-
-/* show check when checked (input must be immediately before label) */
-.allow-empty-control input.allow-empty-checkbox:checked + label::after {
-  opacity: 1 !important;
-}
-
-/* focus ring on the visual box */
-.allow-empty-control input.allow-empty-checkbox:focus + label::before {
-  box-shadow: 0 0 0 3px rgba(183,28,28,0.12) !important;
-  outline: none !important;
-}
-
-/* disabled state */
-.allow-empty-control input.allow-empty-checkbox:disabled + label::before {
-  opacity: 0.6 !important;
-  cursor: not-allowed !important;
-}
-
-/* Force select/unselect buttons to match the refresh button (solid red, white text) */
-.list-controls .select-all-btn,
-.list-controls .deselect-all-btn {
-  background: var(--btn-red, #b71c1c) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(0,0,0,0.18) !important;
-  box-shadow: none !important;
-  padding: 0.25rem 0.6rem !important;
-  font-size: 0.875rem !important;
-  line-height: 1 !important;
-  border-radius: 0.25rem !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.4rem !important;
-  cursor: pointer !important;
-  transition: filter .12s ease, box-shadow .12s ease !important;
-}
-
-/* hover / active / focus */
-.list-controls .select-all-btn:hover,
-.list-controls .deselect-all-btn:hover {
-  filter: brightness(.94) !important;
-}
-.list-controls .select-all-btn:active,
-.list-controls .deselect-all-btn:active {
-  filter: brightness(.9) !important;
-}
-.list-controls .select-all-btn:focus,
-.list-controls .deselect-all-btn:focus {
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(183,28,28,0.12) !important;
-}
-
-/* Ensure they sit above absolutely positioned elements (like the hidden checkbox) */
-.list-controls .select-all-btn,
-.list-controls .deselect-all-btn {
-  z-index: 6
-}
-
-.allow-empty-control .allow-empty-text {
-  pointer-events: none;
-}
-
-/* "Keep screen awake" toggle — smaller than the role switch, centred under it */
-.keep-awake-selection {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #e0e0e0;
-  font-size: clamp(12px, 1.6vw, 16px);
-  margin: 0.25rem 0 0.5rem;
-  opacity: 0.85;
-}
-
-.keep-awake-selection .form-check-label {
-  cursor: pointer;
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
 }
